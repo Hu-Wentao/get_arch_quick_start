@@ -6,7 +6,7 @@
 part of 'get_arch_package.dart';
 
 @module
-abstract class ProfileModule {
+abstract class ProfileQuickStart {
   @Named(k_http_config)
   INetConfig get httpConfig => _httpConfig;
   @Named(k_socket_config)

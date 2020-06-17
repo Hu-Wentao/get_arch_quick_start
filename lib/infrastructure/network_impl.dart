@@ -4,7 +4,6 @@
 // Time  : 15:09
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -51,8 +50,7 @@ class SocketImpl extends ISocket {
   Future<ISocketController> handleWebSocket(
       String tailUrl, void Function() onClose) async {
     final uri = Uri.parse(config.baseUrl + tailUrl);
-    final channel = WebSocketChannel.connect(uri);
-    return SocketCtrlImpl<Map<String, dynamic>>(channel, onClose);
+    return SocketCtrlImpl(WebSocketChannel.connect(uri), onClose);
   }
 
   @override
@@ -66,18 +64,16 @@ class SocketImpl extends ISocket {
   }
 }
 
-class SocketCtrlImpl<T> extends ISocketController<T> {
+class SocketCtrlImpl extends ISocketController {
   final WebSocketChannel _channel;
   final Function _onClose;
 
   @override
-  Stream<T> stream;
+  Stream stream;
 
   SocketCtrlImpl(this._channel, this._onClose)
-      : stream = _channel.stream.map<T>((d) {
-          if (!kReleaseMode) print('WsCtrlImpl.stream: # Ws接收: [\n$d\n]');
-          return jsonDecode(d);
-        }).asBroadcastStream();
+      : stream = _channel.stream.asBroadcastStream()
+          ..listen((event) => print('SocketCtrlImpl #Ws接收: [\n$event\n]'));
 
   @override
   void addRaw(String data) {

@@ -36,6 +36,7 @@ Future<void> initHive({
   Hive.init(path);
 }
 
+@LazySingleton(as: IStorage)
 class StorageImpl extends IStorage {
   final Box<String> box;
 

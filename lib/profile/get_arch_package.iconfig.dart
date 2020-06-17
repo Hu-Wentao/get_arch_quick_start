@@ -6,18 +6,28 @@
 
 import 'package:hive/hive.dart';
 import 'package:get_arch_quick_start/infrastructure/storage_impl.dart';
-import 'package:get_arch_quick_start/infrastructure/network_impl.dart';
-import 'package:get_arch_core/interface/i_network.dart';
 import 'package:get_arch_quick_start/infrastructure/ui/dialog_helper_impl.dart';
 import 'package:get_arch_core/get_arch_core.dart';
+import 'package:get_arch_quick_start/profile/get_arch_package.dart';
+import 'package:get_arch_core/interface/i_network.dart';
+import 'package:get_arch_quick_start/infrastructure/network_impl.dart';
+import 'package:get_arch_core/interface/i_storage.dart';
 import 'package:get_it/get_it.dart';
 
 Future<void> $initGetIt(GetIt g, {String environment}) async {
   final registerHiveBox = _$RegisterHiveBox();
+  final profileQuickStart = _$ProfileQuickStart();
   final box = await registerHiveBox.defaultBox;
   g.registerFactory<Box<String>>(() => box);
-  g.registerLazySingleton<HttpImpl>(() => HttpImpl(g<INetConfig>()));
-  g.registerLazySingleton<SocketImpl>(() => SocketImpl(g<INetConfig>()));
+  g.registerFactory<INetConfig>(() => profileQuickStart.httpConfig,
+      instanceName: 'k_http_config');
+  g.registerFactory<INetConfig>(() => profileQuickStart.socketConfig,
+      instanceName: 'k_socket_config');
+  g.registerLazySingleton<ISocket>(
+      () => SocketImpl(g<INetConfig>(instanceName: 'k_socket_config')));
+  g.registerLazySingleton<IStorage>(() => StorageImpl(g<Box<String>>()));
+  g.registerLazySingleton<IHttp>(
+      () => HttpImpl(g<INetConfig>(instanceName: 'k_http_config')));
 
   //Register prod Dependencies --------
   if (environment == 'prod') {
@@ -36,3 +46,5 @@ Future<void> $initGetIt(GetIt g, {String environment}) async {
 }
 
 class _$RegisterHiveBox extends RegisterHiveBox {}
+
+class _$ProfileQuickStart extends ProfileQuickStart {}
