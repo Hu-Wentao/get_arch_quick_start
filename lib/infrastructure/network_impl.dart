@@ -14,16 +14,16 @@ import 'package:get_arch_core/interface/i_network.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-const k_http_config ='k_http_config';
-const k_socket_config ='k_socket_config';
+const k_http_config = 'k_http_config';
+const k_socket_config = 'k_socket_config';
 
-@lazySingleton
+@LazySingleton(as: IHttp)
 class HttpImpl extends IHttp {
   final Dio _dio;
   @override
   INetConfig config;
 
-  HttpImpl(@Named(k_http_config)this.config)
+  HttpImpl(@Named(k_http_config) this.config)
       : _dio = Dio(
           BaseOptions(
             baseUrl: config.baseUrl,
@@ -40,13 +40,13 @@ class HttpImpl extends IHttp {
           data: dto?.toJson(), queryParameters: queryParameters);
 }
 
-@lazySingleton
+@LazySingleton(as: ISocket)
 class SocketImpl extends ISocket {
   @override
   final INetConfig config;
   Map<String, ISocketController> socketMap = <String, ISocketController>{};
 
-  SocketImpl(@Named(k_socket_config)this.config);
+  SocketImpl(@Named(k_socket_config) this.config);
 
   Future<ISocketController> handleWebSocket(
       String tailUrl, void Function() onClose) async {
@@ -66,7 +66,7 @@ class SocketImpl extends ISocket {
   }
 }
 
-class SocketCtrlImpl<T> implements ISocketController<T> {
+class SocketCtrlImpl<T> extends ISocketController<T> {
   final WebSocketChannel _channel;
   final Function _onClose;
 
@@ -80,10 +80,9 @@ class SocketCtrlImpl<T> implements ISocketController<T> {
         }).asBroadcastStream();
 
   @override
-  void add(Map<String, dynamic> data) {
-    var v = jsonEncode(data);
-    if (!kReleaseMode) print('WsCtrlImpl.add # Ws发送: [\n$v\n]');
-    _channel.sink.add(v);
+  void addRaw(String data) {
+    if (!kReleaseMode) print('SocketCtrlImpl.add # Ws发送: [\n$data\n]');
+    _channel.sink.add(data);
   }
 
   @override
