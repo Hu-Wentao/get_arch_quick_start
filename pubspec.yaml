@@ -1,6 +1,6 @@
 name: get_arch_quick_start
 description: GetArch quick start support
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/Hu-Wentao/get_arch_quick_start
 
 environment:

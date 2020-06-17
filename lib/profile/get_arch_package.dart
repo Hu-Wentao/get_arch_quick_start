@@ -6,6 +6,7 @@
 import 'package:get_arch_core/domain/env_config.dart';
 import 'package:get_arch_core/get_arch_part.dart';
 import 'package:get_arch_core/interface/i_network.dart';
+import 'package:get_arch_core/profile/get_arch_application.dart';
 import 'package:get_arch_quick_start/infrastructure/network_impl.dart';
 import 'package:get_arch_quick_start/infrastructure/storage_impl.dart';
 
@@ -22,7 +23,7 @@ INetConfig _socketConfig;
 /// [openStorageAndNetworkImpl] 如果想要手动实现,则设为false
 /// [assignStoragePath] Hive的初始化路径,不建议手动配置
 /// [onLocalTestStoragePath] Hive本地测试时使用的路径,不建议手动配置
-class QuickStartPackage {
+class QuickStartPackage extends IGetArchPackage {
   final bool openStorageAndNetworkImpl;
 
   final String assignStoragePath;

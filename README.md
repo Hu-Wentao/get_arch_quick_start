@@ -9,7 +9,7 @@ GetArch quick start support
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetArchApplication.run(
-      config: EnvConfig(
+      EnvConfig(
           // ... 配置信息 ...
           ),
       packages: [
