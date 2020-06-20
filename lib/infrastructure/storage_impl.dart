@@ -6,17 +6,9 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:get_arch_core/get_arch_part.dart';
 import 'package:get_arch_core/interface/i_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-
-/// 注册HiveBox
-@module
-abstract class RegisterHiveBox {
-  @preResolve
-  Future<Box<String>> get defaultBox => Hive.openBox<String>('default_box');
-}
 
 Future<void> initHive({
   String assignStoragePath,
@@ -30,13 +22,13 @@ Future<void> initHive({
     try {
       path = (await getApplicationDocumentsDirectory()).path;
     } on MissingPluginException {
-      path = onLocalTestStoragePath ?? './_hive_test_cache';
+      path = onLocalTestStoragePath;
     }
   }
   Hive.init(path);
 }
 
-@LazySingleton(as: IStorage)
+//@LazySingleton(as: IStorage) // 手动注册
 class StorageImpl extends IStorage {
   final Box<String> box;
 

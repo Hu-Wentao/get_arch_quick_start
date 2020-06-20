@@ -7,26 +7,41 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_arch_core/get_arch_part.dart';
 import 'package:get_arch_core/interface/i_common_interface.dart';
 import 'package:get_arch_core/interface/i_network.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-const k_http_config = 'k_http_config';
-const k_socket_config = 'k_socket_config';
+/// HttpImpl 使用的INetConfig类型
+class HttpConfig extends INetConfig {
+  HttpConfig(String scheme, String authority, Map<String, String> staticHeaders)
+      : super(scheme, authority, staticHeaders);
+}
 
-@LazySingleton(as: IHttp)
+/// SocketImpl 使用的INetConfig类型
+class SocketConfig extends INetConfig {
+  SocketConfig(
+      String scheme, String authority, Map<String, String> staticHeaders)
+      : super(scheme, authority, staticHeaders);
+}
+
+/// 已手动注册 @LazySingleton(as: IHttp)
+///
+/// [HttpImpl] 只提供基础功能实现,
+/// 如果要获取http statue code,并进行一些操作, 请自行实现[IHttp]
+/// 或继承[HttpImpl],在构造中添加自定义拦截器
 class HttpImpl extends IHttp {
   final Dio _dio;
   @override
-  INetConfig config;
+  HttpConfig config;
 
-  HttpImpl(@Named(k_http_config) this.config)
+  HttpImpl(this.config)
       : _dio = Dio(
           BaseOptions(
             baseUrl: config.baseUrl,
-//            headers: {}..addAll(config.staticHeaders),
+            headers: config.staticHeaders == null
+                ? {}
+                : ({}..addAll(config.staticHeaders)),
           ),
         )..interceptors.addAll([
             PrettyDioLogger(request: false, requestBody: true),
@@ -34,18 +49,23 @@ class HttpImpl extends IHttp {
 
   @override
   Future handleRequest(String type, String tailUrl,
-          {IDto dto, Map<String, dynamic> queryParameters}) =>
-      _dio.request(tailUrl,
-          data: dto?.toJson(), queryParameters: queryParameters);
+          {IDto dto, Map<String, dynamic> queryParameters}) async =>
+      (await _dio.request(
+        tailUrl,
+        data: dto?.toJson(),
+        queryParameters: queryParameters,
+      ))
+          ?.data;
 }
 
-@LazySingleton(as: ISocket)
+/// 已手动注册 @LazySingleton(as: ISocket)
+/// 实现了基本的socket管理功能
 class SocketImpl extends ISocket {
   @override
-  final INetConfig config;
+  final SocketConfig config;
   Map<String, ISocketController> socketMap = <String, ISocketController>{};
 
-  SocketImpl(@Named(k_socket_config) this.config);
+  SocketImpl(this.config);
 
   Future<ISocketController> handleWebSocket(
       String tailUrl, void Function() onClose) async {

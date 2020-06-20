@@ -5,7 +5,6 @@
 
 import 'dart:ui';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -17,21 +16,22 @@ import 'package:injectable/injectable.dart';
 
 @prod
 @LazySingleton(as: IDialogHelper)
-class DialogHelper extends IDialogHelper {
-  static DialogHelper _instance;
+class QuickDialogHelper extends IDialogHelper {
+  static QuickDialogHelper _instance;
 
-  static DialogHelper get instance {
-    if (_instance == null) _instance = DialogHelper();
+  static QuickDialogHelper get instance {
+    if (_instance == null) _instance = QuickDialogHelper();
     return _instance;
   }
-
-  static Function() popFunc = () => ExtendedNavigator.rootNavigator.pop();
 
   ///
   /// [T] 表示pop后返回值的类型
   /// [ctx] 不能使用 AutoRoute提供的context
   /// [noneActions] 为true时,不展示actions
-  static Future<T> selectTipsWithCtx<T>({
+  /// [onConfirm],[onCancel]需要在函数内调用 路由的pop()方法才能返回
+  ///   这里没有提供默认的实现, 因为某些路由插件有自己的pop()方法,
+  ///   例如auto_route可以直接使用 ExtendedNavigator.rootNavigator.pop(); 进行pop
+  Future<T> selectTipsWithCtx<T>({
     @required BuildContext ctx,
     String title: '提示',
     @required Widget content,
@@ -62,23 +62,14 @@ class DialogHelper extends IDialogHelper {
                       FlatButton(
                         highlightColor: const Color(0x55FF8A80),
                         splashColor: const Color(0x99FF8A80),
-                        onPressed: () {
-                          // 如果不指定泛型T, 那么就代表 onCancel()方法内已有 Navigator操作
-                          if (T.toString() == 'void' ||
-                              T.toString() == 'dynamic') popFunc();
-                          onCancel?.call();
-                        },
+                        onPressed: () => onCancel?.call(),
                         child: const Text(
                           '取消',
                           style: TextStyle(color: Colors.redAccent),
                         ),
                       ),
                       FlatButton(
-                        onPressed: () {
-                          if (T.toString() == 'void' ||
-                              T.toString() == 'dynamic') popFunc();
-                          onConfirm?.call();
-                        },
+                        onPressed: () => onConfirm?.call(),
                         child: const Text('确定'),
                       ),
                     ],
@@ -87,7 +78,7 @@ class DialogHelper extends IDialogHelper {
 
   ///
   /// 尽量使用 [selectTipsWithCtx] 其性能更好
-  static selectTips({
+  selectTips({
     String title: '提示',
     @required Widget content,
     @required VoidCallback onConfirm,
@@ -128,19 +119,15 @@ class DialogHelper extends IDialogHelper {
             ));
   }
 
-  static staticOnErr(dynamic failure) => instance.err(failure);
-
   ///
   /// 异常提示
-  err(dynamic failure) {
-    if (failure is! Failure) failure = UnknownFailure(failure.toString());
+  err(dynamic failure, [dynamic tag]) {
+    if (failure is! Failure)
+      failure = UnknownFailure(failure.toString(), tag ?? '来自Dialog');
     switch (failure.runtimeType) {
-      case NotLoginFailure:
-        _onNotLogin(failure);
-        break;
-      case NeedFeedbackMx:
-        _onNeedFeedback(failure); //  TODO 如,NeedFeedbackFailure就添加 "立即反馈" 按钮
-        break;
+//      case NotLoginFailure:
+//        _onNotLogin(failure);
+//        break;
       default: // 未知异常也使用 NeedFeedback
         _onNeedFeedback(failure);
     }
@@ -162,34 +149,6 @@ class DialogHelper extends IDialogHelper {
             ],
           ));
 
-  static _onNotLogin(f) => BotToast.showWidget(
-      toastBuilder: (cancelFunc) => AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            title: Text('提示'),
-            content: Text('请登陆后继续'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () => cancelFunc(),
-                highlightColor: const Color(0x55FF8A80),
-                splashColor: const Color(0x99FF8A80),
-                child: const Text(
-                  '取消',
-                  style: TextStyle(color: Colors.redAccent),
-                ),
-              ),
-              FlatButton(
-                onPressed: () {
-                  cancelFunc();
-//                      // 跳转到登陆页 fixme: 这里代码耦合了
-//                      ExtendedNavigator.ofRouter<Router>()
-//                          .pushNamed(Routes.authPage);
-                },
-                child: const Text('确定'),
-              ),
-            ],
-          ));
-
   @override
   text(String s) => BotToast.showText(text: s);
 }
@@ -198,11 +157,11 @@ class DialogHelper extends IDialogHelper {
 @LazySingleton(as: IDialogHelper)
 class TestDialogHelper extends IDialogHelper {
   @override
-  err(failure) {
+  err(failure, [tag]) {
     print('''
-╔═╣ TestDialogHelper.err ╠══╗
+╔═╣ TestDialogHelper.err | Tag: $tag╠══╗
   $failure
-╚═══════════════════════════╝
+╚══════════════════════════════════════╝
     ''');
   }
 
