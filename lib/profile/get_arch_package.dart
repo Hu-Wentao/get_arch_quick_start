@@ -5,14 +5,15 @@
 
 import 'package:get_arch_core/domain/env_config.dart';
 import 'package:get_arch_core/get_arch_part.dart';
+import 'package:get_arch_core/interface/i_dialog.dart';
+import 'package:get_arch_core/interface/i_dialog_helper.dart';
 import 'package:get_arch_core/interface/i_network.dart';
 import 'package:get_arch_core/interface/i_storage.dart';
 import 'package:get_arch_core/profile/get_arch_application.dart';
 import 'package:get_arch_quick_start/infrastructure/network_impl.dart';
 import 'package:get_arch_quick_start/infrastructure/storage_impl.dart';
+import 'package:get_arch_quick_start/infrastructure/ui/dialog_helper_impl.dart';
 import 'package:hive/hive.dart';
-
-import 'get_arch_package.iconfig.dart';
 
 final _g = GetIt.instance;
 
@@ -28,6 +29,8 @@ class QuickStartPackage extends IGetArchPackage {
   final bool openStorageImpl;
   final String assignStoragePath;
   final String onLocalTestStoragePath;
+  final bool openDialogImpl;
+  @Deprecated('请使用IDialog取代IDialogHelper')
   final bool openDialogHelperImpl;
 
   QuickStartPackage({
@@ -36,7 +39,8 @@ class QuickStartPackage extends IGetArchPackage {
     this.openStorageImpl: true,
     this.assignStoragePath,
     this.onLocalTestStoragePath: './_hive_test_cache',
-    this.openDialogHelperImpl: true,
+    this.openDialogHelperImpl: false,
+    this.openDialogImpl: true,
   }) : assert(openStorageImpl != null);
 
   @override
@@ -44,7 +48,8 @@ class QuickStartPackage extends IGetArchPackage {
   HTTP实现: 已${httpConfig == null ? '关闭' : '启用(IHttp), 配置为: $httpConfig'}
   Socket实现: 已${socketConfig == null ? '关闭' : '启用(ISocket), 配置为: $socketConfig'}
   Storage实现: 已${openStorageImpl == null ? '关闭' : '启用(IStorage)\n  配置路径: ${assignStoragePath ?? '默认[getApplicationDocumentsDirectory()]'}\n  本地测试时使用的路径: $onLocalTestStoragePath'}
-  DialogHelper实现: 已${!openDialogHelperImpl ? '关闭' : '启用(IDialogHelper)'}
+  Dialog实现: 已${!openDialogImpl ? '关闭' : '启用(IDialog)'}
+  DialogHelper实现<推荐使用"openDialogImpl">: 已${!openDialogHelperImpl ? '关闭' : '启用(IDialogHelper)'}
    ''';
 
   Future<void> initPackage(EnvConfig config) async {
@@ -73,10 +78,39 @@ class QuickStartPackage extends IGetArchPackage {
       _g.registerFactory<Box<String>>(() => box);
       _g.registerLazySingleton<IStorage>(() => StorageImpl(_g<Box<String>>()));
     }
-    if (openDialogHelperImpl) await initDI(config.envSign, this);
+    if (openDialogImpl) await initDialog(_g, config.envSign);
+    if (openDialogHelperImpl) await initDialogHelper(_g, config.envSign);
   }
 }
 
-@injectableInit
-Future<void> initDI(String env, QuickStartPackage quickStartPackage) async =>
-    await $initGetIt(_g, environment: env);
+initDialog(GetIt g, String environment) {
+  if (environment == 'prod') {
+    g.registerLazySingleton<IDialog>(() => QuickDialog());
+  }
+
+//Register test Dependencies --------
+  if (environment == 'test') {
+    g.registerLazySingleton<IDialog>(() => TestDialog());
+  }
+
+//Register dev Dependencies --------
+  if (environment == 'dev') {
+    g.registerLazySingleton<IDialog>(() => DevDialog());
+  }
+}
+
+initDialogHelper(GetIt g, String environment) {
+  if (environment == 'prod') {
+    g.registerLazySingleton<IDialogHelper>(() => QuickDialogHelper());
+  }
+
+//Register test Dependencies --------
+  if (environment == 'test') {
+    g.registerLazySingleton<IDialogHelper>(() => TestDialogHelper());
+  }
+
+//Register dev Dependencies --------
+  if (environment == 'dev') {
+    g.registerLazySingleton<IDialogHelper>(() => DevDialogHelper());
+  }
+}

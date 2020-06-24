@@ -16,13 +16,15 @@ Future<void> main() async {
       packages: [
         // 配置 QuickStartPackage
         QuickStartPackage(
-          httpConfig: INetConfig(
-            scheme: 'http',
-            authority: 'www.example.com:88',
+          httpConfig: HttpConfig(
+            'http',
+            'www.example.com:88',
+            null,
           ),
-          socketConfig: INetConfig(
-            scheme: 'ws',
-            authority: 'www.example.com:8888',
+          socketConfig: INetConfig(  
+            'ws',
+            'www.example.com:8888',
+            null,
           ),
         ),
         // .. 其他模块 ..
@@ -33,9 +35,7 @@ Future<void> main() async {
 
 ```
 
-# 2. Use INetwork
-
-## IHttp 的使用
+# 2. Use IHttp
 ```dart
 // 通讯协议和baseUrl 需要在 INetConfig中配置
 foo() async {
@@ -45,7 +45,7 @@ foo() async {
 }
 ```
 
-## ISocket 的使用
+## 3. Use ISocket
 ```dart
 // 通讯协议和baseUrl 需要在 INetConfig中配置
 foo() async {
@@ -56,7 +56,7 @@ foo() async {
 }
 ```
 
-# 3. Use IStorage
+# 4. Use IStorage
 ```dart
 foo(){
   final box = GetIt.I<IStorage>();

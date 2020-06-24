@@ -33,10 +33,10 @@ class ChipBar<DATA> extends StatelessWidget {
         children: List<RawChip>.generate(
             dataList.length,
             (i) => RawChip(
-              tapEnabled: tapEnabled == null ? true : tapEnabled[i],
-              label: buildLabel(i, dataList[i]),
-              selected: selectIndex == i,
-              onSelected: (b) => onSelected(i, b),
+                  tapEnabled: tapEnabled == null ? true : tapEnabled[i],
+                  label: buildLabel(i, dataList[i]),
+                  selected: selectIndex == i,
+                  onSelected: (b) => onSelected(i, b),
                 )),
       );
 }
