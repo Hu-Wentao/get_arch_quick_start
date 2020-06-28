@@ -6,23 +6,24 @@
 import 'package:get_arch_core/domain/env_config.dart';
 import 'package:get_arch_core/get_arch_part.dart';
 import 'package:get_arch_core/interface/i_dialog.dart';
-import 'package:get_arch_core/interface/i_dialog_helper.dart';
 import 'package:get_arch_core/interface/i_network.dart';
 import 'package:get_arch_core/interface/i_storage.dart';
 import 'package:get_arch_core/profile/get_arch_application.dart';
 import 'package:get_arch_quick_start/infrastructure/network_impl.dart';
 import 'package:get_arch_quick_start/infrastructure/storage_impl.dart';
-import 'package:get_arch_quick_start/infrastructure/ui/dialog_helper_impl.dart';
+import 'package:get_arch_quick_start/infrastructure/ui/dialog_impl.dart';
 import 'package:hive/hive.dart';
 
 final _g = GetIt.instance;
 
 ///
+/// [packageEnvConfig] 为null时将会使用globalEnvConfig的值
 /// [httpConfig] http配置, 如果打算手动注册IHttp的INetConfig,则无需填写
 /// [socketConfig] socket配置, 如果打算手动ISocket的INetConfig,则无需填写
-/// [openStorageImpl] storage配置,如果想要手动实现,则设为false
+/// [openStorageImpl] storage配置, 默认关闭
 /// [assignStoragePath] Hive的初始化路径,不建议手动配置,如果要手动配置,请确保[openStorageImpl]为true
 /// [onLocalTestStoragePath] Hive本地测试时使用的路径,不建议手动配置
+/// [openDialogImpl] Dialog实现, 默认关闭
 class QuickStartPackage extends IGetArchPackage {
   final HttpConfig httpConfig;
   final SocketConfig socketConfig;
@@ -30,26 +31,24 @@ class QuickStartPackage extends IGetArchPackage {
   final String assignStoragePath;
   final String onLocalTestStoragePath;
   final bool openDialogImpl;
-  @Deprecated('请使用IDialog取代IDialogHelper')
-  final bool openDialogHelperImpl;
 
   QuickStartPackage({
+    EnvConfig pkgEnvConfig,
     this.httpConfig,
     this.socketConfig,
-    this.openStorageImpl: true,
+    this.openStorageImpl: false,
     this.assignStoragePath,
     this.onLocalTestStoragePath: './_hive_test_cache',
-    this.openDialogHelperImpl: false,
-    this.openDialogImpl: true,
-  }) : assert(openStorageImpl != null);
+    this.openDialogImpl: false,
+  })  : assert(openStorageImpl != null),
+        super(pkgEnvConfig);
 
   @override
   String printPackageConfigInfo(EnvConfig config) => '''
-  HTTP实现: 已${httpConfig == null ? '关闭' : '启用(IHttp), 配置为: $httpConfig'}
-  Socket实现: 已${socketConfig == null ? '关闭' : '启用(ISocket), 配置为: $socketConfig'}
-  Storage实现: 已${openStorageImpl == null ? '关闭' : '启用(IStorage)\n  配置路径: ${assignStoragePath ?? '默认[getApplicationDocumentsDirectory()]'}\n  本地测试时使用的路径: $onLocalTestStoragePath'}
-  Dialog实现: 已${!openDialogImpl ? '关闭' : '启用(IDialog)'}
-  DialogHelper实现<推荐使用"openDialogImpl">: 已${!openDialogHelperImpl ? '关闭' : '启用(IDialogHelper)'}
+  <IHttp>实现: 已${httpConfig == null ? '关闭' : '启用, 配置为: $httpConfig'}
+  <ISocket>实现: 已${socketConfig == null ? '关闭' : '启用, 配置为: $socketConfig'}
+  <IStorage>实现: 已${openStorageImpl == null ? '关闭' : '启用\n  配置路径: ${assignStoragePath ?? '默认[getApplicationDocumentsDirectory()]'}\n  本地测试时使用的路径: $onLocalTestStoragePath'}
+  <IDialog>实现: 已${!openDialogImpl ? '关闭' : '启用'}
    ''';
 
   Future<void> initPackage(EnvConfig config) async {
@@ -78,8 +77,7 @@ class QuickStartPackage extends IGetArchPackage {
       _g.registerFactory<Box<String>>(() => box);
       _g.registerLazySingleton<IStorage>(() => StorageImpl(_g<Box<String>>()));
     }
-    if (openDialogImpl) await initDialog(_g, config.envSign);
-    if (openDialogHelperImpl) await initDialogHelper(_g, config.envSign);
+    if (openDialogImpl) await initDialog(_g, config.envSign.toString());
   }
 }
 
@@ -96,21 +94,5 @@ initDialog(GetIt g, String environment) {
 //Register dev Dependencies --------
   if (environment == 'dev') {
     g.registerLazySingleton<IDialog>(() => DevDialog());
-  }
-}
-
-initDialogHelper(GetIt g, String environment) {
-  if (environment == 'prod') {
-    g.registerLazySingleton<IDialogHelper>(() => QuickDialogHelper());
-  }
-
-//Register test Dependencies --------
-  if (environment == 'test') {
-    g.registerLazySingleton<IDialogHelper>(() => TestDialogHelper());
-  }
-
-//Register dev Dependencies --------
-  if (environment == 'dev') {
-    g.registerLazySingleton<IDialogHelper>(() => DevDialogHelper());
   }
 }

@@ -1,6 +1,6 @@
 library get_arch_quick_start;
 
-export 'infrastructure/ui/dialog_helper_impl.dart';
+export 'infrastructure/ui/dialog_impl.dart';
 export 'infrastructure/ui/indicator.dart';
 export 'infrastructure/ui/views.dart';
 

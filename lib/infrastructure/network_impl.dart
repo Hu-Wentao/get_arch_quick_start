@@ -44,7 +44,8 @@ class HttpImpl extends IHttp {
                 : ({}..addAll(config.staticHeaders)),
           ),
         )..interceptors.addAll([
-            PrettyDioLogger(request: false, requestBody: true),
+            if (!kReleaseMode)
+              PrettyDioLogger(request: false, requestBody: true),
           ]);
 
   @override
