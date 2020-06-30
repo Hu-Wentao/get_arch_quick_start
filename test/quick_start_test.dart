@@ -8,7 +8,6 @@ import 'package:get_arch_core/domain/env_config.dart';
 import 'package:get_arch_core/get_arch_core.dart';
 import 'package:get_arch_quick_start/profile/get_arch_package.dart';
 import 'package:get_arch_quick_start/infrastructure/network_impl.dart';
-import 'package:get_it/get_it.dart';
 
 main() {
   setUpAll(() async {

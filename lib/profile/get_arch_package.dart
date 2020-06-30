@@ -44,19 +44,28 @@ class QuickStartPackage extends IGetArchPackage {
         super(pkgEnvConfig);
 
   @override
-  String printPackageConfigInfo(EnvConfig config) => '''
-  <IHttp>实现: 已${httpConfig == null ? '关闭' : '启用, 配置为: $httpConfig'}
-  <ISocket>实现: 已${socketConfig == null ? '关闭' : '启用, 配置为: $socketConfig'}
-  <IStorage>实现: 已${openStorageImpl == null ? '关闭' : '启用\n  配置路径: ${assignStoragePath ?? '默认[getApplicationDocumentsDirectory()]'}\n  本地测试时使用的路径: $onLocalTestStoragePath'}
-  <IDialog>实现: 已${!openDialogImpl ? '关闭' : '启用'}
-   ''';
+  Map<String, bool> get printBoolStateWithRegTypeName => {
+        'IHttp': httpConfig != null,
+        'ISocket': socketConfig != null,
+        'IStorage': openStorageImpl != null,
+        'IDialog': openDialogImpl,
+      };
+
+  @override
+  Map<String, String> printOtherStateWithEnvConfig(EnvConfig config) => {
+        if (httpConfig != null) 'IHttp': '配置为: $httpConfig',
+        if (socketConfig != null) 'ISocket': '配置为: $socketConfig',
+        if (openStorageImpl != null)
+          'IStorage':
+              '配置路径: ${assignStoragePath ?? '默认[getApplicationDocumentsDirectory()]'}'
+                  '\n  本地测试时使用的路径: $onLocalTestStoragePath',
+      };
 
   Future<void> initPackage(EnvConfig config) async {
     if (openStorageImpl)
       await initHive(
-        assignStoragePath: assignStoragePath,
-        onLocalTestStoragePath: onLocalTestStoragePath,
-      );
+          assignStoragePath: assignStoragePath,
+          onLocalTestStoragePath: onLocalTestStoragePath);
   }
 
   Future<void> initPackageDI(EnvConfig config) async {

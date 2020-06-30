@@ -1,6 +1,6 @@
 name: get_arch_quick_start
 description: GetArch quick start support
-version: 0.2.1
+version: 0.4.0
 repository: https://github.com/Hu-Wentao/get_arch_quick_start
 
 environment:
@@ -10,10 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  get_arch_core:
-    path: D:/flutter_arch/get_arch_core
-  get_it: ^4.0.2
-  injectable: ^0.4.0+1
+  get_arch_core: ^0.4.0
   dio: ^3.0.9
   pretty_dio_logger: ^1.1.1
   web_socket_channel: ^1.1.0

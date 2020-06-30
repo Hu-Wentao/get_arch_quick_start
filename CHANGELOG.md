@@ -1,3 +1,8 @@
+## [0.4.0] -2020/6/30
+* 适配 get_arch_core v0.4.0 的配置输出方法,
+Map<String, bool> get printBoolStateWithRegTypeName;  
+Map<String, String> printOtherStateWithEnvConfig(EnvConfig config);
+
 ## [0.2.1] - 2020/6/24
 * 适配 get_arch_core v0.2.1
 * 使用 flutter format格式化代码
