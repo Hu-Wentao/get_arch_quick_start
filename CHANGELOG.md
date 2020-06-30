@@ -1,3 +1,6 @@
+## [0.4.1] -2020/7/1
+* 修复 HttpImpl只能发送get请求的bug
+
 ## [0.4.0] -2020/6/30
 * 适配 get_arch_core v0.4.0 的配置输出方法,
 Map<String, bool> get printBoolStateWithRegTypeName;  

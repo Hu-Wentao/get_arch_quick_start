@@ -53,6 +53,7 @@ class HttpImpl extends IHttp {
           {IDto dto, Map<String, dynamic> queryParameters}) async =>
       (await _dio.request(
         tailUrl,
+        options: Options()..method = type,
         data: dto?.toJson(),
         queryParameters: queryParameters,
       ))
