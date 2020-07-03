@@ -7,8 +7,8 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_arch_core/interface/i_common_interface.dart';
-import 'package:get_arch_core/interface/i_network.dart';
+import 'package:get_arch_core/interface/i_dto.dart';
+import 'package:get_arch_quick_start/interface/i_network.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 

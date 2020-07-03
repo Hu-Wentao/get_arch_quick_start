@@ -9,6 +9,8 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_arch_core/get_arch_core.dart';
+import 'package:get_arch_quick_start/domain/error/failures.dart';
+import 'package:get_arch_quick_start/interface/i_dialog.dart';
 
 ///
 /// 本文件依赖于 bot_toast 包
@@ -149,9 +151,6 @@ class QuickDialog extends IDialog {
           ));
 
   @override
-  text(String s) => toast(s);
-
-  @override
   toast(String s) => BotToast.showText(text: s);
 }
 
@@ -166,9 +165,6 @@ class TestDialog extends IDialog {
 ╚══════════════════════════════════════╝
     ''');
   }
-
-  @override
-  text(String f) => toast(f);
 
   @override
   toast(String s) {

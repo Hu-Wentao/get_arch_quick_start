@@ -6,7 +6,7 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:get_arch_core/interface/i_storage.dart';
+import 'package:get_arch_quick_start/interface/i_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 

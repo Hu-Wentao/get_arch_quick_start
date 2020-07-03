@@ -16,3 +16,6 @@ export 'package:auto_route/auto_route_annotations.dart';
 export 'package:bot_toast/bot_toast.dart';
 export 'package:pull_to_refresh/pull_to_refresh.dart';
 export 'package:flutter_gifimage/flutter_gifimage.dart';
+
+export 'package:get_arch_core/get_arch_other.dart';
+

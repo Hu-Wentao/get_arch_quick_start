@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_arch_core/domain/env_config.dart';
 import 'package:get_arch_core/get_arch_core.dart';
-import 'package:get_arch_quick_start/profile/get_arch_package.dart';
+import 'package:get_arch_quick_start/interface/i_network.dart';
+import 'package:get_arch_quick_start/profile/quick_start_package.dart';
 import 'package:get_arch_quick_start/infrastructure/network_impl.dart';
 
 main() {
