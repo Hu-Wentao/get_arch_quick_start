@@ -1,3 +1,6 @@
+## [0.6.2] -2020/7/4
+* 升级GetArchCore到v0.6.1
+
 ## [0.6.1] -2020/7/4
 * 导出i_get_arch_package，web_socket_channel
 

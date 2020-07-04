@@ -1,6 +1,6 @@
 name: get_arch_quick_start
 description: GetArch quick start support
-version: 0.6.1
+version: 0.6.2
 repository: https://github.com/Hu-Wentao/get_arch_quick_start
 
 environment:
@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  get_arch_core: ^0.6.0
+  get_arch_core: ^0.6.1
   verify: ^1.1.1
   dio: ^3.0.9
   pretty_dio_logger: ^1.1.1
