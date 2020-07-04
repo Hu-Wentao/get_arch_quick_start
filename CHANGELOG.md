@@ -1,3 +1,6 @@
+## [0.6.1] -2020/7/4
+* 导出i_get_arch_package，web_socket_channel
+
 ## [0.6.0] -2020/7/3
 * 从 GetArchCore接收大量通用类与基础设施接口
 

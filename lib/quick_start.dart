@@ -18,3 +18,4 @@ export 'infrastructure/storage_impl.dart';
 export 'profile/quick_start_package.dart';
 
 export 'package:get_arch_core/get_arch_core.dart';
+export 'package:get_arch_core/profile/i_get_arch_package.dart';

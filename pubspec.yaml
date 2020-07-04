@@ -1,6 +1,6 @@
 name: get_arch_quick_start
 description: GetArch quick start support
-version: 0.6.0
+version: 0.6.1
 repository: https://github.com/Hu-Wentao/get_arch_quick_start
 
 environment:
@@ -19,7 +19,7 @@ dependencies:
   path_provider: ^1.6.11
   # 3.0.0 bot_toast与auto_route冲突
   bot_toast: ^2.4.0
-  auto_route: ^0.5.0
+  auto_route: ^0.6.0+1
   pull_to_refresh: ^1.6.0
   flutter_gifimage: ^1.0.1
 dev_dependencies:
@@ -27,7 +27,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^1.10.0
   injectable_generator: ^0.4.1
-  auto_route_generator: ^0.5.0
+  auto_route_generator: ^0.6.0
   freezed: ^0.11.2
   mockito: ^4.1.1
 
