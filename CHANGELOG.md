@@ -1,3 +1,6 @@
+## [0.6.3] -2020/7/5
+* IStorage新增 Uint8List类型, int类型数据的读写, StorageImpl添加对应实现
+
 ## [0.6.2] -2020/7/4
 * 升级GetArchCore到v0.6.1
 

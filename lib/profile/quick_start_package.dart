@@ -3,6 +3,8 @@
 // Date  : 2020/6/17
 // Time  : 0:44
 
+import 'dart:typed_data';
+
 import 'package:get_arch_core/domain/env_config.dart';
 import 'package:get_arch_core/get_arch_core.dart';
 import 'package:get_arch_core/profile/i_get_arch_package.dart';
@@ -15,6 +17,10 @@ import 'package:get_arch_quick_start/interface/i_storage.dart';
 import 'package:hive/hive.dart';
 
 final _g = GetIt.instance;
+
+const s_box_name = 'get_arch_quick_start_default_str_box';
+const u_box_name = 'get_arch_quick_start_default_uint8_box';
+const i_box_name = 'get_arch_quick_start_default_int_box';
 
 ///
 /// [packageEnvConfig] 为null时将会使用globalEnvConfig的值
@@ -81,10 +87,17 @@ class QuickStartPackage extends IGetArchPackage {
     // 这里将Box注册为<String>, 存储对象的json字符串, 一般情况下性能与TypeAdapter区别不大
     // 使用TypeAdapter,每个类型都需要不同的id, 在使用多个package的情况下极易出错
     if (openStorageImpl) {
-      final box =
-          await Hive.openBox<String>('default_box_get_arch_quick_start');
-      _g.registerFactory<Box<String>>(() => box);
-      _g.registerLazySingleton<IStorage>(() => StorageImpl(_g<Box<String>>()));
+      final strBox = await Hive.openBox<String>(s_box_name);
+      final u8Box = await Hive.openBox<Uint8List>(u_box_name);
+      final intBox = await Hive.openBox<int>(i_box_name);
+      _g.registerFactory<Box<String>>(() => strBox);
+      _g.registerFactory<Box<Uint8List>>(() => u8Box);
+      _g.registerFactory<Box<int>>(() => intBox);
+      _g.registerLazySingleton<IStorage>(() => StorageImpl(
+            _g<Box<String>>(),
+            _g<Box<Uint8List>>(),
+            _g<Box<int>>(),
+          ));
     }
     if (openDialogImpl) await initDialog(_g, config.envSign.toString());
   }
