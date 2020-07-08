@@ -44,8 +44,19 @@ class INetConfig extends Equatable {
 abstract class IHttp {
   INetConfig get config;
 
-  Future<dynamic> handleRequest(String type, String tailUrl,
-      {IDto dto, Map<String, dynamic> queryParameters});
+  ///
+  /// [type] 可选参数为 GET, POST, PUT 等
+  /// [trailUrl] 即域名之外的部分, 域名可以在[INetConfig]中配置
+  /// [dataDto] 是 [data]的DTO,
+  /// [queryParameters] 供 GET请求使用, 用于传递json
+  /// [data]目前不向get,post等方法开放, 仅供IHttp的Dio实现传递FormData
+  Future<dynamic> handleRequest(
+    String type,
+    String tailUrl, {
+    IDto dataDto,
+    Map<String, dynamic> queryParameters,
+    dynamic data,
+  });
 
   /// get请求可以不加参数,因此[paramDto]可选
   Future<dynamic> get(String tailUrl,
@@ -54,7 +65,7 @@ abstract class IHttp {
 
   /// [dynamic] 表示的是原始json中的data部分
   Future<dynamic> post(String tailUrl, IDto dataDto) async =>
-      await (handleRequest('POST', tailUrl, dto: dataDto));
+      await (handleRequest('POST', tailUrl, dataDto: dataDto));
 
   Future<dynamic> put(String tailUrl,
           {IDto dto, Map<String, dynamic> queryParameters}) async =>

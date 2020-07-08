@@ -49,12 +49,17 @@ class HttpImpl extends IHttp {
           ]);
 
   @override
-  Future handleRequest(String type, String tailUrl,
-          {IDto dto, Map<String, dynamic> queryParameters}) async =>
+  Future handleRequest(
+    String type,
+    String tailUrl, {
+    IDto dataDto,
+    Map<String, dynamic> queryParameters,
+    dynamic data,
+  }) async =>
       (await _dio.request(
         tailUrl,
         options: Options()..method = type,
-        data: dto?.toJson(),
+        data: data ?? dataDto?.toJson(),
         queryParameters: queryParameters,
       ))
           ?.data;
