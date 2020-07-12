@@ -34,12 +34,13 @@ class SocketConfig extends INetConfig {
 ///
 /// 注意, 这 handleRequest(), get(), post()等方法返回的是Dio中的Response实例的 .data属性值
 class HttpImpl extends IHttp {
-  final Dio _dio;
+  @protected
+  final Dio dio;
   @override
   HttpConfig config;
 
   HttpImpl(this.config)
-      : _dio = Dio(
+      : dio = Dio(
           BaseOptions(
               baseUrl: config.baseUrl,
               // 这里的[staticHeaders]可能为immutable,因此需要 Map.from()
@@ -48,7 +49,7 @@ class HttpImpl extends IHttp {
                   : Map.from(config.staticHeaders)),
         )..interceptors.addAll([
             if (!kReleaseMode)
-              PrettyDioLogger(request: false, requestBody: true),
+              PrettyDioLogger(request: false,  requestHeader: true,requestBody: true,),
           ]);
 
   @override
@@ -85,7 +86,7 @@ class HttpImpl extends IHttp {
     dynamic data,
     Options options,
   }) async =>
-      (await _dio.request(
+      (await dio.request(
         tailUrl,
         options: options,
         data: data ?? dataDto?.toJson(),
