@@ -4,6 +4,7 @@
 // Time  : 15:09
 
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -30,6 +31,8 @@ class SocketConfig extends INetConfig {
 /// [HttpImpl] 只提供基础功能实现,
 /// 如果要获取http statue code,并进行一些操作, 请自行实现[IHttp]
 /// 或继承[HttpImpl],在构造中添加自定义拦截器
+///
+/// 注意, 这 handleRequest(), get(), post()等方法返回的是Dio中的Response实例的 .data属性值
 class HttpImpl extends IHttp {
   final Dio _dio;
   @override
@@ -38,11 +41,11 @@ class HttpImpl extends IHttp {
   HttpImpl(this.config)
       : _dio = Dio(
           BaseOptions(
-            baseUrl: config.baseUrl,
-            headers: config.staticHeaders == null
-                ? {}
-                : ({}..addAll(config.staticHeaders)),
-          ),
+              baseUrl: config.baseUrl,
+              // 这里的[staticHeaders]可能为immutable,因此需要 Map.from()
+              headers: config.staticHeaders == null
+                  ? {}
+                  : Map.from(config.staticHeaders)),
         )..interceptors.addAll([
             if (!kReleaseMode)
               PrettyDioLogger(request: false, requestBody: true),
@@ -56,13 +59,39 @@ class HttpImpl extends IHttp {
     Map<String, dynamic> queryParameters,
     dynamic data,
   }) async =>
+      _dioReqAdapter(type, tailUrl,
+          dataDto: dataDto,
+          data: dataDto,
+          options: Options(
+            method: type,
+          ));
+
+  @override
+  Future<Uint8List> handleBytesRequest(String type, String tailUrl,
+          {IDto dataDto, Map<String, dynamic> queryParameters, data}) async =>
+      await _dioReqAdapter(type, tailUrl,
+          dataDto: dataDto,
+          data: dataDto,
+          options: Options(
+            method: type,
+            responseType: ResponseType.bytes,
+          ));
+
+  _dioReqAdapter(
+    String type,
+    String tailUrl, {
+    IDto dataDto,
+    Map<String, dynamic> queryParameters,
+    dynamic data,
+    Options options,
+  }) async =>
       (await _dio.request(
         tailUrl,
-        options: Options()..method = type,
+        options: options,
         data: data ?? dataDto?.toJson(),
         queryParameters: queryParameters,
       ))
-          ?.data;
+          .data;
 }
 
 /// 已手动注册 @LazySingleton(as: ISocket)

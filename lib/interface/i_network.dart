@@ -5,6 +5,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:get_arch_core/get_arch_core.dart';
 import 'package:get_arch_core/interface/i_dto.dart';
 
@@ -51,6 +52,16 @@ abstract class IHttp {
   /// [queryParameters] 供 GET请求使用, 用于传递json
   /// [data]目前不向get,post等方法开放, 仅供IHttp的Dio实现传递FormData
   Future<dynamic> handleRequest(
+    String type,
+    String tailUrl, {
+    IDto dataDto,
+    Map<String, dynamic> queryParameters,
+    dynamic data,
+  });
+
+  ///
+  /// 适用于图片下载场景
+  Future<Uint8List> handleBytesRequest(
     String type,
     String tailUrl, {
     IDto dataDto,

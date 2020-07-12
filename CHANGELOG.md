@@ -1,6 +1,7 @@
 ## [0.7.0] -2020/7/8
+* feat(IHttp): 新增handleBytesRequest(),直接返回byte信息(用于获取图片bytes);
 * feat(IHttp): handleRequest()新增dynamic data参数;
-* feat(network_impl): 适配新的接口
+* feat(network_impl): 适配新的接口;
 
 ## [0.6.3] -2020/7/5
 * IStorage新增 Uint8List类型, int类型数据的读写, StorageImpl添加对应实现
