@@ -62,7 +62,7 @@ class HttpImpl extends IHttp {
   }) async =>
       _dioReqAdapter(type, tailUrl,
           dataDto: dataDto,
-          data: dataDto,
+          data: data,
           options: Options(
             method: type,
           ));
@@ -72,7 +72,7 @@ class HttpImpl extends IHttp {
           {IDto dataDto, Map<String, dynamic> queryParameters, data}) async =>
       await _dioReqAdapter(type, tailUrl,
           dataDto: dataDto,
-          data: dataDto,
+          data: data,
           options: Options(
             method: type,
             responseType: ResponseType.bytes,
