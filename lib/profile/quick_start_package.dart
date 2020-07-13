@@ -53,7 +53,7 @@ class QuickStartPackage extends IGetArchPackage {
   Map<String, bool> get printBoolStateWithRegTypeName => {
         'IHttp': httpConfig != null,
         'ISocket': socketConfig != null,
-        'IStorage': openStorageImpl != null,
+        'IStorage': openStorageImpl,
         'IDialog': openDialogImpl,
       };
 
