@@ -6,7 +6,7 @@
 import 'package:get_arch_core/get_arch_core.dart';
 
 ///
-/// 需要向后台报告的问题 -说明代码逻辑出错\表示层不合理\用户作弊
+/// 需要向后台报告的问题 -说明代码逻辑出错\表示层不合理\非法操作
 mixin NeedFeedbackMx on Failure {
   @override
   void onCreate() {
@@ -108,7 +108,7 @@ class InvalidInputWithoutFeedbackFailure extends Failure {
 }
 
 /// 未知错误,需要反馈
-class UnknownFailure extends Failure with NeedFeedbackMx {
-  UnknownFailure(String msg, [dynamic trace])
-      : super('UnknownFailure', '\n[$msg]\ntrace:\n[$trace]');
+class FeedBackUnknownFailure extends UnknownFailure with NeedFeedbackMx {
+  FeedBackUnknownFailure(String msg, [dynamic trace])
+      : super('FeedBackUnknownFailure', '\n[$msg]\ntrace:\n[$trace]');
 }

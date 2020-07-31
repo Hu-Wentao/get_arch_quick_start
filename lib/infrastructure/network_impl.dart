@@ -49,7 +49,11 @@ class HttpImpl extends IHttp {
                   : Map.from(config.staticHeaders)),
         )..interceptors.addAll([
             if (!kReleaseMode)
-              PrettyDioLogger(request: false,  requestHeader: true,requestBody: true,),
+              PrettyDioLogger(
+                request: false,
+                requestHeader: true,
+                requestBody: true,
+              ),
           ]);
 
   @override

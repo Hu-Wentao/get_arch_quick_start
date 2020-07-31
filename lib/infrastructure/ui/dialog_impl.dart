@@ -124,7 +124,7 @@ class QuickDialog extends IDialog {
   /// 异常提示
   err(dynamic failure, [dynamic tag]) {
     if (failure is! Failure)
-      failure = UnknownFailure(failure.toString(), tag ?? '来自Dialog');
+      failure = FeedBackUnknownFailure(failure.toString(), tag ?? '来自Dialog');
     switch (failure.runtimeType) {
 //      case NotLoginFailure:
 //        _onNotLogin(failure);

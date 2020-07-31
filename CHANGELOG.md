@@ -1,4 +1,6 @@
-## [0.7.0] -2020/7/8
+## [1.0.0] -2020/7/31
+* add(get_arch_application_x.dart): 新增扩展方法flutterRun()
+* refactor(failures.dart,dialog_impl.dart): 适配v1.0.0版本GetArchCore的UnknownFailure
 * feat(IHttp): 新增handleBytesRequest(),直接返回byte信息(用于获取图片bytes);
 * feat(IHttp): handleRequest()新增dynamic data参数;
 * feat(network_impl): 适配新的接口;

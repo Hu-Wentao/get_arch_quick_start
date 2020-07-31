@@ -50,14 +50,6 @@ class QuickStartPackage extends IGetArchPackage {
         super(pkgEnvConfig);
 
   @override
-  Map<String, bool> get printBoolStateWithRegTypeName => {
-        'IHttp': httpConfig != null,
-        'ISocket': socketConfig != null,
-        'IStorage': openStorageImpl,
-        'IDialog': openDialogImpl,
-      };
-
-  @override
   Map<String, String> printOtherStateWithEnvConfig(EnvConfig config) => {
         if (httpConfig != null) 'IHttp': '配置为: $httpConfig',
         if (socketConfig != null) 'ISocket': '配置为: $socketConfig',
@@ -101,6 +93,14 @@ class QuickStartPackage extends IGetArchPackage {
     }
     if (openDialogImpl) await initDialog(_g, config.envSign.toString());
   }
+
+  @override
+  Map<Type, bool> get interfaceImplRegisterStatus => {
+        IHttp: httpConfig != null,
+        ISocket: socketConfig != null,
+        IStorage: openStorageImpl,
+        IDialog: openDialogImpl,
+      };
 }
 
 initDialog(GetIt g, String environment) {
