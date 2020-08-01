@@ -12,10 +12,6 @@ export 'package:dio/dio.dart';
 export 'package:pretty_dio_logger/pretty_dio_logger.dart';
 export 'package:web_socket_channel/web_socket_channel.dart';
 
-export 'package:auto_route/auto_route.dart';
-export 'package:auto_route/auto_route_annotations.dart';
-
-export 'package:bot_toast/bot_toast.dart';
 export 'package:pull_to_refresh/pull_to_refresh.dart';
 export 'package:flutter_gifimage/flutter_gifimage.dart';
 
