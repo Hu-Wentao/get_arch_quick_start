@@ -3,7 +3,9 @@
 // Date  : 2020/7/24
 // Time  : 17:11
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_arch_core/get_arch_core.dart';
 
@@ -35,5 +37,82 @@ extension GetArchApplicationX on GetArchApplication {
         packages: packages,
         mockDI: mockDiAndOtherInitFunc);
     if (run != null) runApp(run);
+  }
+
+  ///
+  /// 内部已经预置了 BotToast初始化代码
+  static Future<void> flutterRunMaterialApp(
+    EnvConfig masterEnvConfig, {
+    List<IGetArchPackage> packages,
+    Future<void> Function(GetIt g) mockDiAndOtherInitFunc,
+    bool printLog: !kReleaseMode,
+    Key key,
+    GlobalKey<NavigatorState> navigatorKey,
+    Widget home,
+    Map<String, WidgetBuilder> routes = const <String, WidgetBuilder>{},
+    String initialRoute,
+    RouteFactory onGenerateRoute,
+    InitialRouteListFactory onGenerateInitialRoutes,
+    RouteFactory onUnknownRoute,
+    List<NavigatorObserver> navigatorObservers = const <NavigatorObserver>[],
+    TransitionBuilder builder,
+    String title = '',
+    GenerateAppTitle onGenerateTitle,
+    Color color,
+    ThemeData theme,
+    ThemeData darkTheme,
+    ThemeMode themeMode = ThemeMode.system,
+    Locale locale,
+    Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
+    LocaleListResolutionCallback localeListResolutionCallback,
+    LocaleResolutionCallback localeResolutionCallback,
+    Iterable<Locale> supportedLocales = const <Locale>[Locale('en', 'US')],
+    bool debugShowMaterialGrid = false,
+    bool showPerformanceOverlay = false,
+    bool checkerboardRasterCacheImages = false,
+    bool checkerboardOffscreenLayers = false,
+    bool showSemanticsDebugger = false,
+    bool debugShowCheckedModeBanner = true,
+    Map<LogicalKeySet, Intent> shortcuts,
+    Map<LocalKey, ActionFactory> actions,
+  }) async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await GetArchApplication.run(
+        masterEnvConfig ?? EnvConfig.sign(EnvSign.prod),
+        printConfig: printLog,
+        packages: packages,
+        mockDI: mockDiAndOtherInitFunc);
+    runApp(MaterialApp(
+      key: key,
+      navigatorKey: navigatorKey,
+      home: home,
+      routes: routes,
+      initialRoute: initialRoute,
+      onGenerateRoute: onGenerateRoute,
+      onGenerateInitialRoutes: onGenerateInitialRoutes,
+      onUnknownRoute: onUnknownRoute,
+      navigatorObservers: [BotToastNavigatorObserver(), ...navigatorObservers],
+      builder: (ctx, child) =>
+          BotToastInit().call(ctx, builder?.call(ctx, child) ?? child),
+      title: title,
+      onGenerateTitle: onGenerateTitle,
+      color: color,
+      theme: theme,
+      darkTheme: darkTheme,
+      themeMode: themeMode,
+      locale: locale,
+      localizationsDelegates: localizationsDelegates,
+      localeListResolutionCallback: localeListResolutionCallback,
+      localeResolutionCallback: localeResolutionCallback,
+      supportedLocales: supportedLocales,
+      debugShowMaterialGrid: debugShowMaterialGrid,
+      showPerformanceOverlay: showPerformanceOverlay,
+      checkerboardRasterCacheImages: checkerboardRasterCacheImages,
+      checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+      showSemanticsDebugger: showSemanticsDebugger,
+      debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+      shortcuts: shortcuts,
+      actions: actions,
+    ));
   }
 }

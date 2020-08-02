@@ -1,10 +1,16 @@
-## [1.0.0] -2020/7/31
-* add(get_arch_application_x.dart): 新增扩展方法flutterRun()
+## [1.0.0] -2020/8/2
+* add(get_arch_application_x.dart):
+ 新增扩展方法flutterRun();
+ 新增扩展方法flutterRunMaterialApp();
+ 已兼容>3.0.0的BotToast;
 * refactor(failures.dart,dialog_impl.dart): 适配v1.0.0版本GetArchCore的UnknownFailure
-* feat(IHttp): 新增handleBytesRequest(),直接返回byte信息(用于获取图片bytes);
-* feat(IHttp): handleRequest()新增dynamic data参数;
+* feat(IHttp):
+ 新增handleBytesRequest(),直接返回byte信息(用于获取图片bytes);
+ handleRequest()新增dynamic data参数;
 * feat(network_impl): 适配新的接口;
-
+* feat(dialog_impl):
+  新增 FailureRoute,IDialog收到异常后,可以展示对应的DIalog;
+  新增QuickAlter,快速构建美观的Dialog;
 ## [0.6.3] -2020/7/5
 * IStorage新增 Uint8List类型, int类型数据的读写, StorageImpl添加对应实现
 
