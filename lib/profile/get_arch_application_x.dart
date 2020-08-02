@@ -20,18 +20,18 @@ extension GetArchApplicationX on GetArchApplication {
   /// [packages] App所使用的其他GetArch模块
   /// [mockDiAndOtherInitFunc] 供测试时手动注册mock依赖, 或者添加一些自定义初始化的代码
   ///   代码将会在 "GetArchCorePackage.init()"之后, package.init()之前被执行
-  /// [printConfig] 是否打印配置结果(建议使用默认配置)
+  /// [printLog] 是否打印配置结果(建议使用默认配置)
   static Future<void> flutterRun(
     EnvConfig masterEnvConfig, {
     @required Widget run,
     List<IGetArchPackage> packages,
     Future<void> Function(GetIt g) mockDiAndOtherInitFunc,
-    bool printConfig: !kReleaseMode,
+    bool printLog: !kReleaseMode,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
     await GetArchApplication.run(
         masterEnvConfig ?? EnvConfig.sign(EnvSign.prod),
-        printConfig: printConfig,
+        printConfig: printLog,
         packages: packages,
         mockDI: mockDiAndOtherInitFunc);
     if (run != null) runApp(run);
