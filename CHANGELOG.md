@@ -1,7 +1,7 @@
 ## [1.0.0] -2020/8/2
 * add(get_arch_application_x.dart):
- 新增扩展方法flutterRun();
- 新增扩展方法flutterRunMaterialApp();
+ 新增扩展方法runFlutter();
+ 新增扩展方法runMaterialApp();
  已兼容>3.0.0的BotToast;
 * refactor(failures.dart,dialog_impl.dart): 适配v1.0.0版本GetArchCore的UnknownFailure
 * feat(IHttp):

@@ -23,7 +23,7 @@ extension GetArchApplicationX on GetArchApplication {
   /// [mockDiAndOtherInitFunc] 供测试时手动注册mock依赖, 或者添加一些自定义初始化的代码
   ///   代码将会在 "GetArchCorePackage.init()"之后, package.init()之前被执行
   /// [printLog] 是否打印配置结果(建议使用默认配置)
-  static Future<void> flutterRun(
+  static Future<void> runFlutter(
     EnvConfig masterEnvConfig, {
     @required Widget run,
     List<IGetArchPackage> packages,
@@ -41,11 +41,12 @@ extension GetArchApplicationX on GetArchApplication {
 
   ///
   /// 内部已经预置了 BotToast初始化代码
-  static Future<void> flutterRunMaterialApp(
+  static Future<void> runMaterialApp(
     EnvConfig masterEnvConfig, {
     List<IGetArchPackage> packages,
     Future<void> Function(GetIt g) mockDiAndOtherInitFunc,
     bool printLog: !kReleaseMode,
+    bool openBotToast: true,
     Key key,
     GlobalKey<NavigatorState> navigatorKey,
     Widget home,
@@ -76,6 +77,7 @@ extension GetArchApplicationX on GetArchApplication {
     Map<LogicalKeySet, Intent> shortcuts,
     Map<LocalKey, ActionFactory> actions,
   }) async {
+    assert(openBotToast != null);
     WidgetsFlutterBinding.ensureInitialized();
     await GetArchApplication.run(
         masterEnvConfig ?? EnvConfig.sign(EnvSign.prod),
@@ -92,8 +94,10 @@ extension GetArchApplicationX on GetArchApplication {
       onGenerateInitialRoutes: onGenerateInitialRoutes,
       onUnknownRoute: onUnknownRoute,
       navigatorObservers: [BotToastNavigatorObserver(), ...navigatorObservers],
-      builder: (ctx, child) =>
-          BotToastInit().call(ctx, builder?.call(ctx, child) ?? child),
+      builder: openBotToast
+          ? (ctx, child) =>
+              BotToastInit().call(ctx, builder?.call(ctx, child) ?? child)
+          : builder,
       title: title,
       onGenerateTitle: onGenerateTitle,
       color: color,
