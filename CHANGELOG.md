@@ -1,3 +1,7 @@
+## [1.0.0+1] -2020/8/3
+* feat(dialog_impl):
+  当err()参数 failure为null时, 直接退出方法;
+
 ## [1.0.0] -2020/8/2
 * add(get_arch_application_x.dart):
  新增扩展方法runFlutter();

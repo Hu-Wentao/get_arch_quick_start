@@ -173,6 +173,7 @@ class QuickDialog extends IDialog {
   /// [tag] 错误标签, 便于Debug
   err(dynamic failure, {@required BuildContext ctx, dynamic tag}) {
     assert(ctx != null, 'err中的ctx不能为null!,否则Dialog将无法关闭');
+    if(failure==null) return;
     if (failure is! Failure)
       failure = FeedBackUnknownFailure(failure.toString(), tag ?? '来自Dialog');
 
