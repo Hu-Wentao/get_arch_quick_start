@@ -4,7 +4,8 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
-import 'package:get_it/get_it.dart';
+
+import 'package:get_arch_core/get_arch_core.dart';
 import 'package:injectable/get_it_helper.dart';
 
 import '../interface/i_dialog.dart';

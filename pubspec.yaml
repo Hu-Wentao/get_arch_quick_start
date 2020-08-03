@@ -10,9 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-#  get_arch_core: ">=1.0.0 <2.0.0"
-  get_arch_core:
-    path: D:/flutter_arch/get_arch_core
+  get_arch_core: ">=1.0.0 <2.0.0"
   injectable: ">=1.0.0 <2.0.0"
   verify: ">=1.1.0 <2.0.0"
   dio: ">=3.0.0 <4.0.0"
