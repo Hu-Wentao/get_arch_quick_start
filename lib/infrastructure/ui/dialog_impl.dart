@@ -171,18 +171,22 @@ class QuickDialog extends IDialog {
   /// [ctx] 不能为空,否则弹出的Dialog无法关闭.
   ///   (当然你也可以实现一个能够在无ctx状态下弹出Dialog并能正常关闭的方案, 但非常不建议这样做)
   /// [tag] 错误标签, 便于Debug
-  err(dynamic failure, {@required BuildContext ctx, dynamic tag}) {
+  Future err(dynamic failure, {@required BuildContext ctx, dynamic tag}) async {
     assert(ctx != null, 'err中的ctx不能为null!,否则Dialog将无法关闭');
-    if(failure==null) return;
+    if (failure is Future) failure = await failure;
+    // 必须放在 "is Future"的后面, 否则传输Future<null> 会出错
+    if (failure == null) return;
     if (failure is! Failure)
-      failure = FeedBackUnknownFailure(failure.toString(), tag ?? '来自Dialog');
+      failure =
+          FeedBackUnknownFailure(failure.toString(), tag ?? '无Tag(来自Dialog)');
 
     if (GetIt.I.isRegistered<FailureRoute>()) {
       final buildDialogFunc = GetIt.I<FailureRoute>().map[failure.runtimeType];
       if (buildDialogFunc != null) {
         if (!kReleaseMode && ctx == null)
-          print(
-              '\n\nQuickDialog.err# tag[$tag]未添加BuildContext,可能无法正常路由跳转! Failure[$failure]\n\n');
+          print('\n\nQuickDialog.err# tag[$tag]未添加BuildContext,可能无法正常路由跳转!'
+              ' Failure[$failure]\n\n');
+
         return widget(
             ctx: ctx, dialogBuilder: (c) => buildDialogFunc(c, failure));
       }
