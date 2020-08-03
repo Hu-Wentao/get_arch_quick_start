@@ -8,9 +8,13 @@
  新增handleBytesRequest(),直接返回byte信息(用于获取图片bytes);
  handleRequest()新增dynamic data参数;
 * feat(network_impl): 适配新的接口;
-* feat(dialog_impl):
+* refactor(dialog_impl/QuickDialog):
   新增 FailureRoute,IDialog收到异常后,可以展示对应的DIalog;
-  新增QuickAlter,快速构建美观的Dialog;
+  新增 QuickAlter,快速构建美观的Dialog;
+  新增IDialog接口多个方法, 本类添加多个实现 selectTips(), err(), toast(), snack(), widget();
+* refactor(quick_start_package):
+  适配1.0.0以上的Injectable;
+
 ## [0.6.3] -2020/7/5
 * IStorage新增 Uint8List类型, int类型数据的读写, StorageImpl添加对应实现
 

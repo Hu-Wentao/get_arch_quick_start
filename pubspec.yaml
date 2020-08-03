@@ -29,8 +29,8 @@ dev_dependencies:
     sdk: flutter
 # dev_dependencies中的内容只能作用于当前项目,请根据自己的项目添加对应依赖
 #
-#  injectable_generator: ">=1.0.0 <2.0.0"
-#  build_runner: "<=1.10.1"
+  injectable_generator: ">=1.0.0 <2.0.0"
+  build_runner: "<=1.10.1"
 #  mockito: ^4.1.1
 
 
