@@ -5,11 +5,9 @@
 // **************************************************************************
 
 
-import 'package:get_arch_core/get_arch_core.dart';
-import 'package:injectable/get_it_helper.dart';
-
-import '../interface/i_dialog.dart';
-import '../infrastructure/ui/dialog_impl.dart';
+import 'package:get_arch_quick_start/qs_interface.dart';
+import 'package:get_arch_quick_start/qs_infrastructure.dart';
+import 'package:get_arch_quick_start/qs_profile.dart';
 
 /// Environment names
 const _prod = 'prod';

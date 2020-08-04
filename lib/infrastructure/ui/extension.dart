@@ -4,6 +4,7 @@
 // Time  : 1:02
 
 import 'package:flutter/widgets.dart';
+import 'package:get_arch_quick_start/qs_domain.dart';
 import 'package:get_arch_quick_start/qs_interface.dart';
 
 ///
@@ -16,6 +17,6 @@ extension DialogX on Failure {
 
 extension FutureDialogX on Future<Failure> {
   errDialog(BuildContext ctx, {dynamic tag, String instanceName}) async {
-    (await this).errDialog(ctx, tag: tag, instanceName: instanceName);
+    GetIt.I<IDialog>(instanceName: instanceName).err(this, ctx: ctx, tag: tag);
   }
 }

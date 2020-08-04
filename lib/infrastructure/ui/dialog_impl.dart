@@ -8,11 +8,9 @@ import 'dart:ui';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get_arch_core/get_arch_core.dart';
-import 'package:get_arch_quick_start/domain/error/failures.dart';
-import 'package:get_arch_quick_start/interface/i_dialog.dart';
-import 'package:get_arch_quick_start/quick_start.dart';
-import 'package:get_arch_quick_start/quick_start_part.dart';
+import 'package:get_arch_quick_start/qs_application.dart';
+import 'package:get_arch_quick_start/qs_domain.dart';
+import 'package:get_arch_quick_start/qs_interface.dart';
 
 ///
 /// 本文件依赖于 bot_toast 包

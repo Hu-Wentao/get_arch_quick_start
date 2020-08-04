@@ -1,6 +1,8 @@
-//library get_arch_quick_start;
+export 'package:get_arch_core/gac_profile.dart';
 
-export 'profile/quick_start_package.dart';
+export 'qs_base.dart';
+
 export 'profile/get_arch_application_x.dart';
+export 'profile/quick_start_package.dart';
 
-export 'qs_core.dart';
+export 'package:injectable/get_it_helper.dart';
