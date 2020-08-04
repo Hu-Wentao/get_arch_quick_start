@@ -1,17 +1,23 @@
-## [1.0.0+1] -2020/8/3
-* feat(dialog_impl):
-  当err()参数 failure为null时, 直接退出方法;
+## [1.1.0] -2020/8/
+* dialog_impl:
+  feat: 当err()参数 failure为null时, 直接退出方法;
+  feat: 调整包结构, 允许分层导出 ( **可能不兼容旧版本的导包代码** , 尤其是单元测试);
 
-## [1.0.0] -2020/8/2
+* add(extension.dart):
+  允许Failure, Future<Failure>快速调用 IDialog.err()方法创建对话框;
+
+## [1.0.0] -2020/8/3
 * add(get_arch_application_x.dart):
  新增扩展方法runFlutter();
  新增扩展方法runMaterialApp();
  已兼容>3.0.0的BotToast;
-* refactor(failures.dart,dialog_impl.dart): 适配v1.0.0版本GetArchCore的UnknownFailure
+* refactor(failures.dart,dialog_impl.dart):
+  适配v1.0.0版本GetArchCore的UnknownFailure
 * feat(IHttp):
  新增handleBytesRequest(),直接返回byte信息(用于获取图片bytes);
  handleRequest()新增dynamic data参数;
-* feat(network_impl): 适配新的接口;
+* feat(network_impl):
+  适配新的接口;
 * refactor(dialog_impl/QuickDialog):
   新增 FailureRoute,IDialog收到异常后,可以展示对应的DIalog;
   新增 QuickAlter,快速构建美观的Dialog;
