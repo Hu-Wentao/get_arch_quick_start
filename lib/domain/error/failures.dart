@@ -6,6 +6,9 @@
 import 'package:get_arch_core/get_arch_core.dart';
 
 ///
+/// 这里是一些常用的Failure
+
+///
 /// 需要向后台报告的问题 -说明代码逻辑出错\表示层不合理\非法操作
 mixin NeedFeedbackMx on Failure {
   @override
@@ -104,7 +107,7 @@ class NetworkFailure extends Failure {
 
 /// 用户输入的格式没有问题, 只是参数值无效, 例如密码错误
 class InvalidInputWithoutFeedbackFailure extends Failure {
-  InvalidInputWithoutFeedbackFailure(String msg) : super('[请重输参数]', '$msg');
+  InvalidInputWithoutFeedbackFailure(String msg) : super('[请检查后重试]', '$msg');
 }
 
 /// 未知错误,需要反馈

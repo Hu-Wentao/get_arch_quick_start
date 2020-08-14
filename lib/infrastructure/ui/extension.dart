@@ -10,13 +10,25 @@ import 'package:get_arch_quick_start/qs_interface.dart';
 ///
 /// 用于View中快速调用 Dialog.err()
 extension DialogX on Failure {
-  errDialog(BuildContext ctx, {dynamic tag, String instanceName}) {
-    GetIt.I<IDialog>(instanceName: instanceName).err(this, ctx: ctx, tag: tag);
+  ///
+  /// [T] 通常情况下为 Widget, 如果有需要的话
+  errDialog<T>(BuildContext ctx,
+      {dynamic tag, String instanceName, IDialog dialog, T returnVal}) {
+    if (this != null)
+      (dialog ?? GetIt.I<IDialog>(instanceName: instanceName))
+          .err(this, ctx: ctx, tag: tag);
+    return returnVal;
   }
 }
 
 extension FutureDialogX on Future<Failure> {
-  errDialog(BuildContext ctx, {dynamic tag, String instanceName}) async {
-    GetIt.I<IDialog>(instanceName: instanceName).err(this, ctx: ctx, tag: tag);
+  asyncErrDialog<T>(BuildContext ctx,
+      {dynamic tag, String instanceName, IDialog dialog, T returnVal}) async {
+    this?.then((value) => value.errDialog(ctx,
+        tag: tag,
+        instanceName: instanceName,
+        dialog: dialog,
+        returnVal: returnVal));
+    return returnVal;
   }
 }

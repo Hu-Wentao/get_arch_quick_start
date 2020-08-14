@@ -1,12 +1,18 @@
-## [1.1.0] -2020/8/
+## [1.1.0] -2020/8/14
+* notice: Only Injectable versions ">=1.0.0 <=1.0.2" are supported
+* fix(network_impl.dart): 修复网络请求没有发送"queryParameters"参数的bug!
 * dialog_impl:
   feat: 当err()参数 failure为null时, 直接退出方法;
   feat: 调整包结构, 允许分层导出 ( **可能不兼容旧版本的导包代码** , 尤其是单元测试);
 
 * add(extension.dart):
   允许Failure, Future<Failure>快速调用 IDialog.err()方法创建对话框;
+  DialogX: errDialog();
+  FutureDialogX: asyncErrDialog();
 
-## [1.0.0] -2020/8/3
+## [1.0.0] -2020/8/3  - Only Injectable versions ">=1.0.0 <=1.0.2" are supported!
+* 由于"injectable>1.0.2"版本有不兼容修改, 因此请不要在该版本引入">1.0.2"的injectable版本
+    如果出现bug, 请在 主项目的pubspec.yaml中添加 "injectable: '>=1.0.0 <=1.0.2'"
 * add(get_arch_application_x.dart):
  新增扩展方法runFlutter();
  新增扩展方法runMaterialApp();

@@ -4,7 +4,6 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
-
 import 'package:get_arch_quick_start/qs_interface.dart';
 import 'package:get_arch_quick_start/qs_infrastructure.dart';
 import 'package:get_arch_quick_start/qs_profile.dart';
