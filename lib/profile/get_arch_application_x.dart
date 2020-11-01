@@ -75,7 +75,7 @@ extension GetArchApplicationX on GetArchApplication {
     bool showSemanticsDebugger = false,
     bool debugShowCheckedModeBanner = true,
     Map<LogicalKeySet, Intent> shortcuts,
-    Map<LocalKey, ActionFactory> actions,
+    Map<Type, Action<Intent>> actions,
   }) async {
     assert(openBotToast != null);
     WidgetsFlutterBinding.ensureInitialized();
