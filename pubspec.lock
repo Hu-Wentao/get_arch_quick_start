@@ -234,7 +234,7 @@ packages:
       path: "."
       ref: "v1.0.1"
       resolved-ref: "968f8aff01e5d4ccc83b7ae254bb6fd3824fc21e"
-      url: "https://e.coding.net/donove/flutter/get_arch_core.git"
+      url: "https://e.coding.net/donove/flutter/get_arch_core"
     source: git
     version: "1.0.1"
   get_it:
