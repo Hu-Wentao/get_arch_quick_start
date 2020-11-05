@@ -5,9 +5,9 @@
 
 import 'dart:ui';
 
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_arch_quick_start/infrastructure/ui/dialog_widget.dart';
 import 'package:get_arch_quick_start/qs_application.dart';
 import 'package:get_arch_quick_start/qs_domain.dart';
 import 'package:get_arch_quick_start/qs_interface.dart';
@@ -140,28 +140,6 @@ class QuickDialog extends IDialog {
   }
 
   ///
-  /// 尽量使用 [selectTips] 其性能更好
-  selectTipsWithoutCtx({
-    String title: '提示',
-    @required Widget content,
-    @required VoidCallback onConfirm,
-    VoidCallback onCancel,
-  }) =>
-      BotToast.showWidget(
-          toastBuilder: (cancelFunc) => QuickAlert(
-                title: Text('$title'),
-                content: content,
-                onConfirm: () {
-                  cancelFunc();
-                  return onConfirm?.call();
-                },
-                onCancel: () {
-                  cancelFunc();
-                  return onCancel?.call();
-                },
-              ));
-
-  ///
   /// 异常提示
   /// 请在View层使用Dialog, 不要在ViewModel或其他地方使用Dialog!
   ///
@@ -191,29 +169,36 @@ class QuickDialog extends IDialog {
     } else {
       if (!kReleaseMode) print('QuickDialog.err # 您尚未注册"FailureRoute"!');
     }
-    _onNeedFeedback(failure);
+    _onNeedFeedback(failure, ctx);
   }
 
-  static _onNeedFeedback(Failure f) => BotToast.showWidget(
-      toastBuilder: (cancelFunc) => QuickAlert(
-            title: Text(f.runtimeType.toString()),
-            content: Text(f.msg),
-            customActions: <Widget>[
-              FlatButton(
-                onPressed: () => cancelFunc(),
-                highlightColor: const Color(0x55FF8A80),
-                splashColor: const Color(0x99FF8A80),
-                child: const Text('Ok'),
-              ),
-            ],
-          ));
+  static _onNeedFeedback(Failure f, BuildContext ctx) => QuickAlert(
+        title: Text(f.runtimeType.toString()),
+        content: Text(f.msg),
+        customActions: <Widget>[
+          FlatButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            highlightColor: const Color(0x55FF8A80),
+            splashColor: const Color(0x99FF8A80),
+            child: const Text('Ok'),
+          ),
+        ],
+      );
 
   @override
-  toast(String s, {BuildContext ctx}) => ctx != null
-      ? snack(
-          SnackBar(content: Text('$s'), behavior: SnackBarBehavior.floating),
-          ctx: ctx)
-      : BotToast.showText(text: s);
+  toast(String s, {@required BuildContext ctx}) => showDialog(
+        context: ctx,
+        builder: (c) {
+          return TextToast(
+            contentPadding:
+                const EdgeInsets.only(left: 14, right: 14, top: 5, bottom: 7),
+            contentColor: Colors.black54,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            textStyle: const TextStyle(fontSize: 17, color: Colors.white),
+            text: s,
+          );
+        },
+      );
 
   @override
   snack(SnackBar snackBar, {BuildContext ctx}) =>
@@ -231,12 +216,10 @@ class QuickDialog extends IDialog {
     WidgetBuilder dialogBuilder,
     bool barrierDismissible = true,
   }) =>
-      ctx == null
-          ? BotToast.showWidget(toastBuilder: (_) => dialogBuilder(null))
-          : showDialog<T>(
-              context: ctx,
-              builder: dialogBuilder,
-              barrierDismissible: barrierDismissible);
+      showDialog<T>(
+          context: ctx,
+          builder: dialogBuilder,
+          barrierDismissible: barrierDismissible);
 }
 
 @dev

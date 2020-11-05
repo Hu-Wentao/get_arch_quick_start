@@ -3,7 +3,6 @@
 // Date  : 2020/7/24
 // Time  : 17:11
 
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -93,11 +92,15 @@ extension GetArchApplicationX on GetArchApplication {
       onGenerateRoute: onGenerateRoute,
       onGenerateInitialRoutes: onGenerateInitialRoutes,
       onUnknownRoute: onUnknownRoute,
-      navigatorObservers: [BotToastNavigatorObserver(), ...navigatorObservers],
-      builder: openBotToast
-          ? (ctx, child) =>
-              BotToastInit().call(ctx, builder?.call(ctx, child) ?? child)
-          : builder,
+
+      // navigatorObservers: [BotToastNavigatorObserver(), ...navigatorObservers],
+      navigatorObservers: navigatorObservers,
+      builder: builder,
+      // builder: openBotToast
+      //     ? (ctx, child) =>
+      //         BotToastInit().call(ctx, builder?.call(ctx, child) ?? child)
+      //     : builder,
+
       title: title,
       onGenerateTitle: onGenerateTitle,
       color: color,

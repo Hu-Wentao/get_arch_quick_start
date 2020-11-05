@@ -25,7 +25,7 @@ abstract class IDialog {
 
   /// Toast
   /// [ctx] toast不强制要求上下文, 因为toast没有页面跳转的需求.
-  toast(String s, {BuildContext ctx});
+  toast(String s, {@required BuildContext ctx});
 
   ///
   /// 展示SnackBar, 请确保在使用时,其parent中有[Scaffold]
