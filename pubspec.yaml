@@ -13,7 +13,7 @@ dependencies:
   get_arch_core:
     git:
       url: https://e.coding.net/donove/flutter/get_arch_core
-      ref: v1.0.1
+      ref: v1.2
 #  get_arch_core: ">=1.1.0 <2.0.0"
   injectable: ">=1.0.0 <=1.0.2"
 #  injectable: ">=1.0.0 <2.0.0"
