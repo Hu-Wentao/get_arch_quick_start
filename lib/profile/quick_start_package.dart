@@ -20,9 +20,9 @@ import 'package:injectable/get_it_helper.dart';
 
 final _g = GetIt.instance;
 
-const _prod = 'prod';
-const _test = 'test';
-const _dev = 'dev';
+final _prod = EnvSign.prod.toString();
+final _test = EnvSign.test.toString();
+final _dev = EnvSign.dev.toString();
 const s_box_name = 'get_arch_quick_start_default_str_box';
 const u_box_name = 'get_arch_quick_start_default_uint8_box';
 const i_box_name = 'get_arch_quick_start_default_int_box';
