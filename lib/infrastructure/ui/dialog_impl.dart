@@ -201,7 +201,7 @@ class QuickDialog extends IDialog {
       );
 
   @override
-  snack(SnackBar snackBar, {BuildContext ctx}) =>
+  snack(SnackBar snackBar, {@required BuildContext ctx}) =>
       Scaffold.of(ctx).showSnackBar(snackBar);
 
   /// [ctx] 可选, 添加后性能更好,[ctx]为空则会使用BotToast
