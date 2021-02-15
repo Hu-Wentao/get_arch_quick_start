@@ -211,14 +211,15 @@ class QuickDialog extends IDialog {
   /// BotToast返回的是 CancelFunc, 调用后可以关闭Dialog,
   ///   如果需要对[dialog]内的操作做出反应,请使用回调函数
   @override
-  widget<T>({
+  Future<T> widget<T>({
     @required BuildContext ctx,
-    WidgetBuilder dialogBuilder,
+    @Deprecated('请用builder') WidgetBuilder dialogBuilder,
+    WidgetBuilder builder,
     bool barrierDismissible = true,
   }) =>
       showDialog<T>(
           context: ctx,
-          builder: dialogBuilder,
+          builder: builder ?? dialogBuilder,
           barrierDismissible: barrierDismissible);
 }
 
