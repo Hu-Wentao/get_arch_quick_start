@@ -47,13 +47,18 @@ class QuickAlert extends AlertDialog {
   QuickAlert({
     Widget title: const Text('提示'),
     Widget content,
+    bool nouseQuickActions = false, // 不使用以下三个参数(不展示此处预设的action按钮)
     List<Widget> customActions,
     VoidCallback onConfirm,
     VoidCallback onCancel,
   })  : assert(
-            (customActions != null) ^
-                (!(onConfirm == null && onCancel == null)),
-            '确保左右两边不同(如果自定义了action,则两个回调也就没有意义了)'),
+            ((customActions != null) ^
+                    (!(onConfirm == null && onCancel == null))) ||
+                (customActions == null &&
+                    onConfirm == null &&
+                    onCancel == null &&
+                    nouseQuickActions),
+            '确保左右两边不同,或者全部为null(如果自定义了action,则两个回调也就没有意义了)'),
         super(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           title: title,
@@ -63,22 +68,24 @@ class QuickAlert extends AlertDialog {
             right: 20,
             top: 18,
           ),
-          actions: customActions ??
-              <Widget>[
-                FlatButton(
-                  highlightColor: const Color(0x55FF8A80),
-                  splashColor: const Color(0x99FF8A80),
-                  onPressed: () => onCancel?.call(),
-                  child: const Text(
-                    '取消',
-                    style: TextStyle(color: Colors.redAccent),
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () => onConfirm?.call(),
-                  child: const Text('确定'),
-                ),
-              ],
+          actions: nouseQuickActions
+              ? null
+              : customActions ??
+                  <Widget>[
+                    FlatButton(
+                      highlightColor: const Color(0x55FF8A80),
+                      splashColor: const Color(0x99FF8A80),
+                      onPressed: () => onCancel?.call(),
+                      child: const Text(
+                        '取消',
+                        style: TextStyle(color: Colors.redAccent),
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: () => onConfirm?.call(),
+                      child: const Text('确定'),
+                    ),
+                  ],
         );
 }
 
