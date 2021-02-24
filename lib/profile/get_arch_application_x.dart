@@ -3,17 +3,21 @@
 // Date  : 2020/7/24
 // Time  : 17:11
 
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_arch_core/get_arch_core.dart';
 
 extension GetArchApplicationX on GetArchApplication {
+  static Map<String, Object> customInfo = {};
+
   ///
   /// Flutter App可以使用该方法初始化应用
   /// ```dart
   /// main(){
-  ///   await GetArchApplication.flutterRun(...);
+  ///   await GetArchApplication.runFlutter(...);
   /// }
   /// ```
   /// [masterEnvConfig] App运行的默认环境, [packages]中没有被指定[EnvConfig]的模块都将使用该环境
@@ -42,10 +46,10 @@ extension GetArchApplicationX on GetArchApplication {
   /// 内部已经预置了 BotToast初始化代码
   static Future<void> runMaterialApp(
     EnvConfig masterEnvConfig, {
+    FutureOr<void> Function() beforeRun,
     List<IGetArchPackage> packages,
     Future<void> Function(GetIt g) mockDiAndOtherInitFunc,
     bool printLog: !kReleaseMode,
-    bool openBotToast: true,
     Key key,
     GlobalKey<NavigatorState> navigatorKey,
     Widget home,
@@ -76,8 +80,8 @@ extension GetArchApplicationX on GetArchApplication {
     Map<LogicalKeySet, Intent> shortcuts,
     Map<Type, Action<Intent>> actions,
   }) async {
-    assert(openBotToast != null);
     WidgetsFlutterBinding.ensureInitialized();
+    await beforeRun?.call();
     await GetArchApplication.run(
         masterEnvConfig ?? EnvConfig.sign(EnvSign.prod),
         printConfig: printLog,
@@ -92,15 +96,8 @@ extension GetArchApplicationX on GetArchApplication {
       onGenerateRoute: onGenerateRoute,
       onGenerateInitialRoutes: onGenerateInitialRoutes,
       onUnknownRoute: onUnknownRoute,
-
-      // navigatorObservers: [BotToastNavigatorObserver(), ...navigatorObservers],
       navigatorObservers: navigatorObservers,
       builder: builder,
-      // builder: openBotToast
-      //     ? (ctx, child) =>
-      //         BotToastInit().call(ctx, builder?.call(ctx, child) ?? child)
-      //     : builder,
-
       title: title,
       onGenerateTitle: onGenerateTitle,
       color: color,
