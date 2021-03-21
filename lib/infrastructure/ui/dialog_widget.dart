@@ -36,7 +36,7 @@ class TextToastState extends State<TextToast> {
       builder: (BuildContext context, BoxConstraints constraints) {
         return Container(
             constraints:
-            constraints.copyWith(maxWidth: constraints.biggest.width * 0.6),
+                constraints.copyWith(maxWidth: constraints.biggest.width * 0.6),
             padding: widget.contentPadding,
             decoration: BoxDecoration(
               color: widget.contentColor,

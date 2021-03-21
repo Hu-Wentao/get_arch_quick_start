@@ -130,18 +130,22 @@ class QuickDialog extends IDialog {
         builder: (ctx) => QuickAlert(
               title: Text('$title'),
               content: content,
-              onConfirm: () {
-                // 如果不指定泛型T, 那么就代表 onCancel()方法内已有 Navigator操作
-                //   否则就需要在这里手动pop
-                if (T.toString() == 'void' || T.toString() == 'dynamic')
-                  Navigator.pop(ctx);
-                return onConfirm?.call();
-              },
-              onCancel: () {
-                if (T.toString() == 'void' || T.toString() == 'dynamic')
-                  Navigator.pop(ctx);
-                return onCancel?.call();
-              },
+              onConfirm: customActions != null
+                  ? null
+                  : () {
+                      // 如果不指定泛型T, 那么就代表 onCancel()方法内已有 Navigator操作
+                      //   否则就需要在这里手动pop
+                      if (T.toString() == 'void' || T.toString() == 'dynamic')
+                        Navigator.pop(ctx);
+                      return onConfirm?.call();
+                    },
+              onCancel: customActions != null
+                  ? null
+                  : () {
+                      if (T.toString() == 'void' || T.toString() == 'dynamic')
+                        Navigator.pop(ctx);
+                      return onCancel?.call();
+                    },
               customActions: customActions,
             ));
   }
