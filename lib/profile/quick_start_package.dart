@@ -5,9 +5,7 @@
 
 import 'dart:typed_data';
 
-import 'package:get_arch_core/domain/env_config.dart';
 import 'package:get_arch_core/get_arch_core.dart';
-import 'package:get_arch_core/profile/i_get_arch_package.dart';
 import 'package:get_arch_quick_start/infrastructure/network_impl.dart';
 import 'package:get_arch_quick_start/infrastructure/storage_impl.dart';
 import 'package:get_arch_quick_start/infrastructure/ui/dialog_impl.dart';
@@ -16,7 +14,6 @@ import 'package:get_arch_quick_start/interface/i_network.dart';
 import 'package:get_arch_quick_start/interface/i_storage.dart';
 import 'package:get_arch_quick_start/quick_start_part.dart';
 import 'package:hive/hive.dart';
-import 'package:injectable/get_it_helper.dart';
 
 final _g = GetIt.instance;
 

@@ -5,8 +5,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get_arch_quick_start/qs_domain.dart';
-import 'package:get_arch_quick_start/qs_interface.dart';
+import 'package:get_arch_core/get_arch_core.dart';
+import 'package:get_arch_quick_start/quick_start.dart';
 
 ///
 /// 用于View中快速调用 Dialog.err()
@@ -16,7 +16,8 @@ extension DialogX on Failure {
   /// ```dart
   /// foo().onFailure((f){ ..do sth... return xxx}).errDialog(context);
   /// ```
-  Failure mapFailure(Failure Function(Failure f) mapFailure) => mapFailure(this);
+  Failure mapFailure(Failure Function(Failure f) mapFailure) =>
+      mapFailure(this);
 
   ///
   /// [T] 通常情况下为 Widget, 如果有需要的话

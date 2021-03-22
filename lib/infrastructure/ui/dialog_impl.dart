@@ -7,10 +7,10 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_arch_core/domain/failure.dart';
 import 'package:get_arch_quick_start/infrastructure/ui/dialog_widget.dart';
-import 'package:get_arch_quick_start/qs_application.dart';
-import 'package:get_arch_quick_start/qs_domain.dart';
-import 'package:get_arch_quick_start/qs_interface.dart';
+import 'package:get_arch_quick_start/interface/i_dialog.dart';
+import 'package:get_arch_quick_start/quick_start.dart';
 
 ///
 /// 本文件依赖于 bot_toast 包

@@ -1,6 +1,6 @@
 name: get_arch_quick_start
 description: GetArch quick start support
-version: 1.1.0
+version: 2.0.0-dev
 repository: https://github.com/Hu-Wentao/get_arch_quick_start
 
 environment:
@@ -13,24 +13,27 @@ dependencies:
   get_arch_core:
     git:
       url: https://e.coding.net/donove/flutter/get_arch_core
-      ref: v1.2
-#  get_arch_core: ">=1.1.0 <2.0.0"
-  injectable: ">=1.0.0 <=1.0.2"
-  yaml: ^2.2.1
-  verify: ">=1.1.0 <2.0.0"
-  dio: ">=3.0.0 <4.0.0"
-  pretty_dio_logger: ">=1.1.0 <2.0.0"
-  web_socket_channel: ">=1.1.0 <2.0.0"
-  hive: ">=1.4.1+1 <2.0.0"
-  path_provider: ">=1.6.10 <2.0.0"
+      ref: v2.1
+  injectable: ^1.2.0
+  yaml: ^3.1.0
+  verify: ^1.1.1
+  dio: ^3.0.10
+  pretty_dio_logger: ^1.1.1
+  web_socket_channel: ^2.0.0
+  hive: ^2.0.0
+  path_provider: ^2.0.1
+  nil: ^1.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
 # dev_dependencies中的内容只能作用于当前项目,请根据自己的项目添加对应依赖
 #
-  injectable_generator: ">=1.0.0 <2.0.0"
-  build_runner: "<=1.10.1"
+  injectable_generator: null  
+  build_runner: null
 #  mockito: ^4.1.1
 
+# dependency_overrides:
+  # get_arch_core:
+  #   path: D:\flutter_arch\get_arch_core
 
 flutter:

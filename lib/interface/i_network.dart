@@ -7,7 +7,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:get_arch_core/get_arch_core.dart';
-import 'package:get_arch_core/interface/i_dto.dart';
 
 ///
 /// 网络配置
