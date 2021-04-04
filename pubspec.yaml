@@ -14,15 +14,14 @@ dependencies:
     git:
       url: https://e.coding.net/donove/flutter/get_arch_core
       ref: v2.1
-  injectable: ^1.2.0
+  injectable: 
   yaml: ^3.1.0
-  verify: ^1.1.1
-  dio: ^3.0.10
-  pretty_dio_logger: ^1.1.1
+  dio: ^4.0.0
+  pretty_dio_logger: null
   web_socket_channel: ^2.0.0
-  hive: ^2.0.0
-  path_provider: ^2.0.1
-  nil: ^1.0.1
+  hive: ^2.0.2
+  path_provider: ^2.0.0
+  nil: null
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -72,16 +72,18 @@ class QuickAlert extends AlertDialog {
               ? null
               : customActions ??
                   <Widget>[
-                    FlatButton(
-                      highlightColor: const Color(0x55FF8A80),
-                      splashColor: const Color(0x99FF8A80),
+                    TextButton(
+                      style: TextButton.styleFrom(primary: Colors.red),
+
+                      // highlightColor: const Color(0x55FF8A80),
+                      // splashColor: const Color(0x99FF8A80),
                       onPressed: () => onCancel?.call(),
                       child: const Text(
                         '取消',
                         style: TextStyle(color: Colors.redAccent),
                       ),
                     ),
-                    FlatButton(
+                    TextButton(
                       onPressed: () => onConfirm?.call(),
                       child: const Text('确定'),
                     ),
@@ -187,10 +189,12 @@ class QuickDialog extends IDialog {
         title: Text(f.runtimeType.toString()),
         content: Text(f.msg),
         customActions: <Widget>[
-          FlatButton(
+          TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            highlightColor: const Color(0x55FF8A80),
-            splashColor: const Color(0x99FF8A80),
+            style: TextButton.styleFrom(primary: Colors.red),
+            // style:ButtonStyle(),
+            // highlightColor: const Color(0x55FF8A80),
+            // splashColor: const Color(0x99FF8A80),
             child: const Text('Ok'),
           ),
         ],
