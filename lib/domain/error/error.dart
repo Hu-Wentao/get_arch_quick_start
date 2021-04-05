@@ -26,7 +26,7 @@ class NotAuthenticatedError extends Error {}
 ///
 /// 本地缓存出错
 class StorageError extends MsgError<String> {
-  StorageError({String msg}) : super('CacheFailure: $msg');
+  StorageError({String? msg}) : super('CacheFailure: $msg');
 }
 
 class TypeError extends MsgError<String> {

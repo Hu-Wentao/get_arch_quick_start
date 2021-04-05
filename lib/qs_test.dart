@@ -3,6 +3,8 @@
 // Date  : 2020/6/16
 // Time  : 23:22
 
+// @dart=2.9
+
 library quick_start_part;
 
 export 'quick_start.dart' hide dev, test, prod, Notification;

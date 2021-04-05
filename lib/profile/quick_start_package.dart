@@ -3,6 +3,8 @@
 // Date  : 2020/6/17
 // Time  : 0:44
 
+// @dart=2.9
+
 import 'dart:typed_data';
 
 import 'package:get_arch_core/get_arch_core.dart';

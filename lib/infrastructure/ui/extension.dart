@@ -3,6 +3,8 @@
 // Date  : 2020/8/4
 // Time  : 1:02
 
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_arch_core/get_arch_core.dart';

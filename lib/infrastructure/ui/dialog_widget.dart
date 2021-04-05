@@ -2,10 +2,9 @@
 // Email : hu.wentao@outlook.com
 // Date  : 2020/11/5
 // Time  : 18:19
-// Created by Hu Wentao.
-// Email : hu.wentao@outlook.com
-// Date  : 2020/11/5
-// Time  : 15:12
+
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 
 ///文本提示的Widget
@@ -31,23 +30,21 @@ class TextToast extends StatefulWidget {
 
 class TextToastState extends State<TextToast> {
   @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return Container(
-            constraints:
-                constraints.copyWith(maxWidth: constraints.biggest.width * 0.6),
-            padding: widget.contentPadding,
-            decoration: BoxDecoration(
-              color: widget.contentColor,
-              borderRadius: widget.borderRadius,
-            ),
-            child: Text(
-              widget.text,
-              style: widget.textStyle,
-              textAlign: TextAlign.center,
-            ));
-      },
-    );
-  }
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Container(
+              constraints: constraints.copyWith(
+                  maxWidth: constraints.biggest.width * 0.6),
+              padding: widget.contentPadding,
+              decoration: BoxDecoration(
+                color: widget.contentColor,
+                borderRadius: widget.borderRadius,
+              ),
+              child: Text(
+                widget.text,
+                style: widget.textStyle,
+                textAlign: TextAlign.center,
+              ));
+        },
+      );
 }
