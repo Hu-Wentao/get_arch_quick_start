@@ -62,9 +62,9 @@ class ClientFailure extends Failure with NeedFeedbackMx {
   }
 
   // 从服务器校验出客户端发出的参数有误
-  factory ClientFailure.badParam(String head, String code, String? msg) {
+  factory ClientFailure.badParam(String? head, String? code, String msg) {
     // note-m: 各个feat中都需要继承自 ClientFailure的 BadParamFailure类,方便进行异常处理
-    return BadParamFailure(head, code, '$msg');
+    return BadParamFailure('$head', '$code', msg);
   }
 
   // 从本地校验出输入值出错
