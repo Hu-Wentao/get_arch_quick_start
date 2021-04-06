@@ -51,7 +51,7 @@ abstract class IDialog {
   Future<T?> selectTips<T>({
     required BuildContext ctx,
     String title: '提示',
-    required Widget content,
+    Widget? content,
     required VoidCallback onConfirm,
     VoidCallback onCancel,
     List<Widget> customActions,

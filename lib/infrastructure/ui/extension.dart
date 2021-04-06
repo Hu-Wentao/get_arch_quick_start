@@ -21,12 +21,12 @@ extension DialogX on Failure? {
 
   ///
   /// [T] 通常情况下为 Widget, 如果有需要的话
-  T errDialog<T>(
+  T? errDialog<T>(
     BuildContext ctx, {
     dynamic tag,
     String? instanceName,
     IDialog? dialog,
-    required T returnVal,
+    T? returnVal,
   }) {
     if (this != null)
       (dialog ?? GetIt.I<IDialog>(instanceName: instanceName))

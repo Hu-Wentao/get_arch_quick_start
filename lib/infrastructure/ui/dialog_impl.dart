@@ -117,7 +117,7 @@ class QuickDialog extends IDialog {
   Future<T?> selectTips<T>({
     required BuildContext ctx,
     String title: '提示',
-    required Widget content,
+    Widget? content,
     VoidCallback? onConfirm,
     VoidCallback? onCancel,
     List<Widget>? customActions,
