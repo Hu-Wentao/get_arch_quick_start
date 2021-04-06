@@ -3,8 +3,6 @@
 // Date  : 2020/4/15
 // Time  : 18:08
 
-// @dart=2.9
-
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -48,11 +46,11 @@ class FailureRoute {
 class QuickAlert extends AlertDialog {
   QuickAlert({
     Widget title: const Text('提示'),
-    Widget content,
+    Widget? content,
     bool nouseQuickActions = false, // 不使用以下三个参数(不展示此处预设的action按钮)
-    List<Widget> customActions,
-    VoidCallback onConfirm,
-    VoidCallback onCancel,
+    List<Widget>? customActions,
+    VoidCallback? onConfirm,
+    VoidCallback? onCancel,
   })  : assert(
             ((customActions != null) ^
                     (!(onConfirm == null && onCancel == null))) ||
@@ -97,11 +95,11 @@ class QuickAlert extends AlertDialog {
 @test
 @LazySingleton(as: IDialog)
 class QuickDialog extends IDialog {
-  static QuickDialog _instance;
+  static QuickDialog? _instance;
 
   static QuickDialog get instance {
     if (_instance == null) _instance = QuickDialog();
-    return _instance;
+    return _instance!;
   }
 
   static QuickDialog get I => instance;
@@ -116,15 +114,14 @@ class QuickDialog extends IDialog {
   /// [customActions] 自定义Action,
   ///   值为null时, Dialog将会有两个默认的"确认"和"取消"按钮,
   ///   值为[] 时, 将隐藏 action按钮
-  Future<T> selectTips<T>({
-    @required BuildContext ctx,
+  Future<T?> selectTips<T>({
+    required BuildContext ctx,
     String title: '提示',
-    @required Widget content,
-    @required VoidCallback onConfirm,
-    VoidCallback onCancel,
-    List<Widget> customActions,
+    required Widget content,
+    VoidCallback? onConfirm,
+    VoidCallback? onCancel,
+    List<Widget>? customActions,
   }) {
-    assert(ctx != null, '请填写ctx! 如果无法提供BuildContext,请使用 selectTips()');
     assert(
         (customActions?.length == 0) ^ (onConfirm != null || onCancel != null),
         '隐藏action 与 两个回调方法不全为空 互斥');
@@ -162,7 +159,7 @@ class QuickDialog extends IDialog {
   /// [ctx] 不能为空,否则弹出的Dialog无法关闭.
   ///   (当然你也可以实现一个能够在无ctx状态下弹出Dialog并能正常关闭的方案, 但非常不建议这样做)
   /// [tag] 错误标签, 便于Debug
-  Future err(dynamic failure, {@required BuildContext ctx, dynamic tag}) async {
+  Future err(dynamic failure, {required BuildContext ctx, dynamic tag}) async {
     assert(ctx != null, 'err中的ctx不能为null!,否则Dialog将无法关闭');
     if (failure is Future) failure = await failure;
     // 必须放在 "is Future"的后面, 否则传输Future<null> 会出错
@@ -178,8 +175,7 @@ class QuickDialog extends IDialog {
           print('\n\nQuickDialog.err# tag[$tag]未添加BuildContext,可能无法正常路由跳转!'
               ' Failure[$failure]\n\n');
 
-        return widget(
-            ctx: ctx, dialogBuilder: (c) => buildDialogFunc(c, failure));
+        return widget(ctx: ctx, builder: (c) => buildDialogFunc(c, failure));
       }
     } else {
       if (!kReleaseMode) print('QuickDialog.err # 您尚未注册"FailureRoute"!');
@@ -203,7 +199,7 @@ class QuickDialog extends IDialog {
       );
 
   @override
-  toast(String s, {@required BuildContext ctx}) => showDialog(
+  toast(String s, {required BuildContext ctx}) => showDialog(
         context: ctx,
         builder: (c) {
           return TextToast(
@@ -218,7 +214,7 @@ class QuickDialog extends IDialog {
       );
 
   @override
-  snack(SnackBar snackBar, {@required BuildContext ctx}) =>
+  snack(SnackBar snackBar, {required BuildContext ctx}) =>
       Scaffold.of(ctx).showSnackBar(snackBar);
 
   /// [ctx] 可选, 添加后性能更好,[ctx]为空则会使用BotToast
@@ -228,15 +224,14 @@ class QuickDialog extends IDialog {
   /// BotToast返回的是 CancelFunc, 调用后可以关闭Dialog,
   ///   如果需要对[dialog]内的操作做出反应,请使用回调函数
   @override
-  Future<T> widget<T>({
-    @required BuildContext ctx,
-    @Deprecated('请用builder') WidgetBuilder dialogBuilder,
-    WidgetBuilder builder,
+  Future<T?> widget<T>({
+    required BuildContext ctx,
+    required WidgetBuilder builder,
     bool barrierDismissible = true,
   }) =>
-      showDialog<T>(
+      showDialog<T?>(
           context: ctx,
-          builder: builder ?? dialogBuilder,
+          builder: builder,
           barrierDismissible: barrierDismissible);
 }
 
@@ -244,7 +239,7 @@ class QuickDialog extends IDialog {
 @LazySingleton(as: IDialog)
 class DevQuickDialog extends IDialog {
   @override
-  err(dynamic failure, {dynamic tag, BuildContext ctx}) {
+  err(dynamic failure, {dynamic tag, required BuildContext ctx}) {
     print('''
 ╔═╣ DevDialog.err | Tag: $tag╠══╗
   $failure
@@ -253,7 +248,7 @@ class DevQuickDialog extends IDialog {
   }
 
   @override
-  toast(String s, {BuildContext ctx}) {
+  toast(String s, {required BuildContext ctx}) {
     print('''
 ╔═╣ DevDialog.text ╠═╗
   $s
@@ -262,7 +257,7 @@ class DevQuickDialog extends IDialog {
   }
 
   @override
-  snack(SnackBar snackBar, {BuildContext ctx}) {
+  snack(SnackBar snackBar, {required BuildContext ctx}) {
     print('''
 ╔═╣ DevDialog.snack ╠═╗
   ${snackBar.toStringDeep()}
@@ -271,27 +266,30 @@ class DevQuickDialog extends IDialog {
   }
 
   @override
-  widget<T>(
-      {BuildContext ctx,
-      WidgetBuilder dialogBuilder,
-      bool barrierDismissible = true}) {
+  Future<T?> widget<T>({
+    required BuildContext ctx,
+    required WidgetBuilder builder,
+    bool barrierDismissible = true,
+  }) async {
     print('''
 ╔═╣ DevDialog.widget ╠═╗
   Context: [$ctx]
   barrierDismissible: [$barrierDismissible]
-  ${dialogBuilder.call(ctx).toStringDeep()}
+  ${builder.call(ctx).toStringDeep()}
 ╚═══════════════════════════╝
     ''');
+    return null;
   }
 
   @override
-  Future<T> selectTips<T>(
-      {BuildContext ctx,
-      String title = '提示',
-      Widget content,
-      onConfirm,
-      onCancel,
-      List<Widget> customActions}) {
+  Future<T?> selectTips<T>({
+    required BuildContext ctx,
+    String title = '提示',
+    Widget? content,
+    VoidCallback? onConfirm,
+    VoidCallback? onCancel,
+    List<Widget>? customActions,
+  }) async {
     print('''
 ╔═╣ DevDialog.selectTipsWithCtx ╠═╗
   Context: [$ctx]

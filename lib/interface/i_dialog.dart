@@ -3,8 +3,6 @@
 // Date  : 2020/6/22
 // Time  : 23:18
 
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -23,21 +21,21 @@ abstract class IDialog {
   /// <返回值为dynamic,不要修改为void,否则无法通过Either.fold中的代码检查>
   /// 注意: 如果err弹出的Dialog有路由跳转的需求, 那么[ctx]不能为空
   ///   (如果是使用其他无需ctx的Navigator,则需要手动配置路由pop方法)
-  err(dynamic failure, {dynamic tag, @required BuildContext ctx});
+  err(dynamic failure, {dynamic tag, required BuildContext ctx});
 
   /// Toast
   /// [ctx] toast不强制要求上下文, 因为toast没有页面跳转的需求.
-  toast(String s, {@required BuildContext ctx});
+  toast(String s, {required BuildContext ctx});
 
   ///
   /// 展示SnackBar, 请确保在使用时,其parent中有[Scaffold]
-  snack(SnackBar snackBar, {@required BuildContext ctx});
+  snack(SnackBar snackBar, {required BuildContext ctx});
 
   /// 展示Dialog
   /// (无 ctx 的对话框不能直接接受返回值, 但可以通过回调的方式获得返回值)
-  widget<T>({
-    @required BuildContext ctx,
-    WidgetBuilder dialogBuilder,
+  Future<T?> widget<T>({
+    required BuildContext ctx,
+    required WidgetBuilder builder,
     bool barrierDismissible = true,
   });
 
@@ -50,11 +48,11 @@ abstract class IDialog {
   /// [onCancel] 当点击了默认的"取消"按钮后
   ///
   /// [customActions] 自定义Actions,该参数与 [onConfirm]和 [onCancel]互斥
-  Future<T> selectTips<T>({
-    @required BuildContext ctx,
+  Future<T?> selectTips<T>({
+    required BuildContext ctx,
     String title: '提示',
-    @required Widget content,
-    @required VoidCallback onConfirm,
+    required Widget content,
+    required VoidCallback onConfirm,
     VoidCallback onCancel,
     List<Widget> customActions,
   });

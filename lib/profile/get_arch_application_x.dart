@@ -3,8 +3,6 @@
 // Date  : 2020/7/24
 // Time  : 17:11
 
-// @dart=2.9
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -29,49 +27,49 @@ extension GetArchApplicationX on GetArchApplication {
   ///   代码将会在 "GetArchCorePackage.init()"之后, package.init()之前被执行
   /// [printLog] 是否打印配置结果(建议使用默认配置)
   static Future<void> runFlutter(
-    EnvConfig masterEnvConfig, {
-    @required Widget run,
-    List<IGetArchPackage> packages,
-    Future<void> Function(GetIt g) mockDiAndOtherInitFunc,
+    EnvConfig? masterEnvConfig, {
+    required Widget run,
+    List<IGetArchPackage>? packages,
+    Future<void> Function(GetIt g)? mockDiAndOtherInitFunc,
     bool printLog: !kReleaseMode,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
     await GetArchApplication.run(
         masterEnvConfig ?? EnvConfig.sign(EnvSign.prod),
         printConfig: printLog,
-        packages: packages,
+        packages: packages ?? [],
         mockDI: mockDiAndOtherInitFunc);
-    if (run != null) runApp(run);
+    runApp(run);
   }
 
   ///
   /// 内部已经预置了 BotToast初始化代码
   static Future<void> runMaterialApp(
-    EnvConfig masterEnvConfig, {
-    FutureOr<void> Function() beforeRun,
-    List<IGetArchPackage> packages,
-    Future<void> Function(GetIt g) mockDiAndOtherInitFunc,
+    EnvConfig? masterEnvConfig, {
+    FutureOr<void> Function()? beforeRun,
+    List<IGetArchPackage>? packages,
+    Future<void> Function(GetIt g)? mockDiAndOtherInitFunc,
     bool printLog: !kReleaseMode,
-    Key key,
-    GlobalKey<NavigatorState> navigatorKey,
-    Widget home,
+    Key? key,
+    GlobalKey<NavigatorState>? navigatorKey,
+    Widget? home,
     Map<String, WidgetBuilder> routes = const <String, WidgetBuilder>{},
-    String initialRoute,
-    RouteFactory onGenerateRoute,
-    InitialRouteListFactory onGenerateInitialRoutes,
-    RouteFactory onUnknownRoute,
+    String? initialRoute,
+    RouteFactory? onGenerateRoute,
+    InitialRouteListFactory? onGenerateInitialRoutes,
+    RouteFactory? onUnknownRoute,
     List<NavigatorObserver> navigatorObservers = const <NavigatorObserver>[],
-    TransitionBuilder builder,
+    TransitionBuilder? builder,
     String title = '',
-    GenerateAppTitle onGenerateTitle,
-    Color color,
-    ThemeData theme,
-    ThemeData darkTheme,
-    ThemeMode themeMode = ThemeMode.system,
-    Locale locale,
-    Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates,
-    LocaleListResolutionCallback localeListResolutionCallback,
-    LocaleResolutionCallback localeResolutionCallback,
+    GenerateAppTitle? onGenerateTitle,
+    Color? color,
+    ThemeData? theme,
+    ThemeData? darkTheme,
+    ThemeMode? themeMode = ThemeMode.system,
+    Locale? locale,
+    Iterable<LocalizationsDelegate<dynamic>>? localizationsDelegates,
+    LocaleListResolutionCallback? localeListResolutionCallback,
+    LocaleResolutionCallback? localeResolutionCallback,
     Iterable<Locale> supportedLocales = const <Locale>[Locale('en', 'US')],
     bool debugShowMaterialGrid = false,
     bool showPerformanceOverlay = false,
@@ -79,15 +77,15 @@ extension GetArchApplicationX on GetArchApplication {
     bool checkerboardOffscreenLayers = false,
     bool showSemanticsDebugger = false,
     bool debugShowCheckedModeBanner = true,
-    Map<LogicalKeySet, Intent> shortcuts,
-    Map<Type, Action<Intent>> actions,
+    Map<LogicalKeySet, Intent>? shortcuts,
+    Map<Type, Action<Intent>>? actions,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
     await beforeRun?.call();
     await GetArchApplication.run(
         masterEnvConfig ?? EnvConfig.sign(EnvSign.prod),
         printConfig: printLog,
-        packages: packages,
+        packages: packages ?? [],
         mockDI: mockDiAndOtherInitFunc);
     runApp(MaterialApp(
       key: key,

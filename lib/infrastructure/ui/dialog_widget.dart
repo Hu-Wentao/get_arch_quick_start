@@ -3,8 +3,6 @@
 // Date  : 2020/11/5
 // Time  : 18:19
 
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 
 ///文本提示的Widget
@@ -16,12 +14,12 @@ class TextToast extends StatefulWidget {
   final TextStyle textStyle;
 
   const TextToast({
-    Key key,
-    @required this.text,
-    this.contentPadding,
-    this.contentColor,
-    this.borderRadius,
-    this.textStyle,
+    Key? key,
+    required this.text,
+    required this.contentPadding,
+    required this.contentColor,
+    required this.borderRadius,
+    required this.textStyle,
   }) : super(key: key);
 
   @override

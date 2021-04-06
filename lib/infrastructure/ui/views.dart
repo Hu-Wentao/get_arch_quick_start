@@ -3,8 +3,6 @@
 // Date  : 2020/5/9
 // Time  : 21:37
 
-// @dart=2.9
-
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'extension.dart';
@@ -15,19 +13,19 @@ class ChipBar<DATA> extends StatelessWidget {
   final Axis direction;
   final int selectIndex;
   final List<DATA> dataList;
-  final List<bool> tapEnabled;
+  final List<bool>? tapEnabled;
   final Widget Function(int i, DATA data) buildLabel;
   final Function(int index, bool selected) onSelected;
 
   const ChipBar({
-    Key key,
+    Key? key,
     this.direction: Axis.horizontal,
     this.tapEnabled,
-    @required this.selectIndex,
-    @required this.dataList,
-    @required this.buildLabel,
-    @required this.onSelected,
-  })  : assert(tapEnabled == null || tapEnabled.length == dataList.length,
+    required this.selectIndex,
+    required this.dataList,
+    required this.buildLabel,
+    required this.onSelected,
+  })   : assert(tapEnabled == null || tapEnabled.length == dataList.length,
             '按钮开关状态必须与数据源长度匹配!'),
         super(key: key);
 
@@ -38,7 +36,7 @@ class ChipBar<DATA> extends StatelessWidget {
         children: List<RawChip>.generate(
             dataList.length,
             (i) => RawChip(
-                  tapEnabled: tapEnabled == null ? true : tapEnabled[i],
+                  tapEnabled: tapEnabled == null ? true : tapEnabled![i],
                   label: buildLabel(i, dataList[i]),
                   selected: selectIndex == i,
                   onSelected: (b) => onSelected(i, b),
@@ -50,7 +48,7 @@ class ChipBar<DATA> extends StatelessWidget {
 /// 自定义的顶栏。
 class FixedAppBar extends StatelessWidget {
   const FixedAppBar({
-    Key key,
+    Key? key,
     this.title,
     this.leading,
     this.automaticallyImplyLeading = true,
@@ -66,19 +64,19 @@ class FixedAppBar extends StatelessWidget {
 
   /// Title widget.
   /// 标题部件
-  final Widget title;
+  final Widget? title;
 
   /// Leading widget.
   /// 头部部件
-  final Widget leading;
+  final Widget? leading;
 
   /// Action widgets.
   /// 尾部操作部件
-  final List<Widget> actions;
+  final List<Widget>? actions;
 
   /// Padding for actions.
   /// 尾部操作部分的内边距
-  final EdgeInsetsGeometry actionsPadding;
+  final EdgeInsetsGeometry? actionsPadding;
 
   /// Whether it should imply leading with [BackButton] automatically.
   /// 是否会自动检测并添加返回按钮至头部
@@ -94,7 +92,7 @@ class FixedAppBar extends StatelessWidget {
 
   /// Background color.
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// The size of the shadow below the app bar.
   /// 底部阴影的大小
@@ -102,7 +100,7 @@ class FixedAppBar extends StatelessWidget {
 
   /// Height of the app bar.
   /// 高度
-  final double height;
+  final double? height;
 
   /// Value that can enable the app bar using filter with [ui.ImageFilter]
   /// 实现高斯模糊效果的值
@@ -110,7 +108,7 @@ class FixedAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget _title = title;
+    Widget? _title = title;
     if (centerTitle) {
       _title = Center(child: _title);
     }
@@ -156,7 +154,7 @@ class FixedAppBar extends StatelessWidget {
                     : AlignmentDirectional.centerStart,
                 child: DefaultTextStyle(
                   child: _title,
-                  style: Theme.of(context).textTheme.headline6.copyWith(
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
                         fontSize: 23.0,
                         fontWeight: FontWeight.normal,
                       ),
@@ -177,7 +175,8 @@ class FixedAppBar extends StatelessWidget {
               end: 0.0,
               child: Padding(
                 padding: actionsPadding ?? EdgeInsets.zero,
-                child: Row(mainAxisSize: MainAxisSize.min, children: actions),
+                child: Row(
+                    mainAxisSize: MainAxisSize.min, children: actions ?? []),
               ),
             ),
         ],
@@ -199,10 +198,10 @@ class FixedAppBar extends StatelessWidget {
 /// 顶栏封装。防止内容块层级高于顶栏导致遮挡阴影。
 class FixedAppBarWrapper extends StatelessWidget {
   const FixedAppBarWrapper({
-    Key key,
-    @required this.appBar,
-    @required this.body,
-  })  : assert(
+    Key? key,
+    required this.appBar,
+    required this.body,
+  })   : assert(
           appBar != null && body != null,
           'All fields must not be null.',
         ),

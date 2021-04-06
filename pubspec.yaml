@@ -1,6 +1,6 @@
 name: get_arch_quick_start
 description: GetArch quick start support
-version: 2.1.0-nullsafety.3
+version: 2.1.0-nullsafety.4
 repository: https://github.com/Hu-Wentao/get_arch_quick_start
 
 environment:

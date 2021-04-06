@@ -3,8 +3,6 @@
 // Date  : 2020/6/11
 // Time  : 22:17
 
-// @dart=2.9
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -17,7 +15,7 @@ class INetConfig extends Equatable {
   final String authority; // www.google.com:80
   String get baseUrl => '$scheme://$authority';
 
-  final Map<String, String> staticHeaders; // 固定的请求头
+  final Map<String, String>? staticHeaders; // 固定的请求头
 
   INetConfig(
     this.scheme,
@@ -27,16 +25,16 @@ class INetConfig extends Equatable {
         assert(authority != null);
 
   INetConfig.named({
-    String scheme,
-    String authority,
-    Map<String, dynamic> staticHeaders,
+    required String scheme,
+    required String authority,
+    Map<String, String>? staticHeaders,
   }) : this(scheme, authority, staticHeaders);
 
   @override
   List<Object> get props => [
         scheme,
         authority,
-        staticHeaders,
+        staticHeaders ?? '',
       ]; //
   final bool stringify = true;
 }
@@ -55,8 +53,8 @@ abstract class IHttp {
   Future<dynamic> handleRequest(
     String type,
     String tailUrl, {
-    IDto dataDto,
-    Map<String, dynamic> queryParameters,
+    IDto? dataDto,
+    Map<String, dynamic>? queryParameters,
     dynamic data,
   });
 
@@ -72,7 +70,7 @@ abstract class IHttp {
 
   /// get请求可以不加参数,因此[paramDto]可选
   Future<dynamic> get(String tailUrl,
-          {IDto paramDto, Map<String, dynamic> queryParameters}) async =>
+          {IDto? paramDto, Map<String, dynamic>? queryParameters}) async =>
       await (handleRequest('GET', tailUrl, queryParameters: queryParameters));
 
   /// [dynamic] 表示的是原始json中的data部分
@@ -80,20 +78,20 @@ abstract class IHttp {
       await (handleRequest('POST', tailUrl, dataDto: dataDto));
 
   Future<dynamic> put(String tailUrl,
-          {IDto dto, Map<String, dynamic> queryParameters}) async =>
+          {IDto? dto, Map<String, dynamic>? queryParameters}) async =>
       await (handleRequest('PUT', tailUrl, queryParameters: queryParameters));
 
   Future<dynamic> delete(String tailUrl,
-          {IDto dto, Map<String, dynamic> queryParameters}) async =>
+          {IDto? dto, Map<String, dynamic>? queryParameters}) async =>
       await (handleRequest('DELETE', tailUrl,
           queryParameters: queryParameters));
 
   Future<dynamic> head(String tailUrl,
-          {IDto dto, Map<String, dynamic> queryParameters}) async =>
+          {IDto? dto, Map<String, dynamic>? queryParameters}) async =>
       await (handleRequest('HEAD', tailUrl, queryParameters: queryParameters));
 
   Future<dynamic> patch(String tailUrl,
-          {IDto dto, Map<String, dynamic> queryParameters}) async =>
+          {IDto? dto, Map<String, dynamic>? queryParameters}) async =>
       await (handleRequest('PATCH', tailUrl, queryParameters: queryParameters));
 }
 
