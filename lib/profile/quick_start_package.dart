@@ -73,8 +73,9 @@ class QuickStartPackage extends IGetArchPackage {
           onLocalTestStoragePath: onLocalTestStoragePath);
   }
 
-  Future<void>? initPackageDI(EnvConfig config, {GetItHelper? gh}) async {
-    gh ??= GetItHelper(_g, config.envSign.inString);
+  Future<void>? initPackageDI(EnvConfig config,
+      {EnvironmentFilter? filter}) async {
+    final gh = GetItHelper(_g, config.envSign.inString, filter);
 
     if (httpConfig != null) {
       gh.lazySingleton<HttpConfig>(() => httpConfig!);

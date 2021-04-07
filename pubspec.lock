@@ -226,7 +226,7 @@ packages:
     description:
       path: "."
       ref: "v2.3"
-      resolved-ref: "94dcf8f0ecb1b56172dba6539676975dba9b8266"
+      resolved-ref: "5287012b1248f5310bae53dda687e0e516fb04de"
       url: "https://e.coding.net/donove/flutter/get_arch_core"
     source: git
     version: "2.2.0"
