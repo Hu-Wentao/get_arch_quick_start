@@ -75,7 +75,8 @@ class QuickStartPackage extends IGetArchPackage {
 
   Future<void>? initPackageDI(EnvConfig config,
       {EnvironmentFilter? filter}) async {
-    final gh = GetItHelper(_g, config.envSign.inString, filter);
+    final gh = GetItHelper(
+        _g, filter != null ? null : config.envSign.inString, filter);
 
     if (httpConfig != null) {
       gh.lazySingleton<HttpConfig>(() => httpConfig!);
