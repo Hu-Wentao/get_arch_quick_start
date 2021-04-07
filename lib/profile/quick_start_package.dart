@@ -73,17 +73,17 @@ class QuickStartPackage extends IGetArchPackage {
           onLocalTestStoragePath: onLocalTestStoragePath);
   }
 
-  Future<void>? initPackageDI(EnvConfig config) async {
-    final _gh = GetItHelper(_g, config.envSign.toString());
+  Future<void>? initPackageDI(EnvConfig config, {GetItHelper? gh}) async {
+    gh ??= GetItHelper(_g, config.envSign.inString);
 
     if (httpConfig != null) {
-      _gh.lazySingleton<HttpConfig>(() => httpConfig!);
-      _gh.lazySingleton<IHttp>(() => HttpImpl(_g<HttpConfig>()));
+      gh.lazySingleton<HttpConfig>(() => httpConfig!);
+      gh.lazySingleton<IHttp>(() => HttpImpl(_g<HttpConfig>()));
     }
 
     if (socketConfig != null) {
-      _gh.lazySingleton<SocketConfig>(() => socketConfig!);
-      _gh.lazySingleton<ISocket>(() => SocketImpl(_g<SocketConfig>()));
+      gh.lazySingleton<SocketConfig>(() => socketConfig!);
+      gh.lazySingleton<ISocket>(() => SocketImpl(_g<SocketConfig>()));
     }
     // 这里将Box注册为<String>, 存储对象的json字符串, 一般情况下性能与TypeAdapter区别不大
     // 使用TypeAdapter,每个类型都需要不同的id, 在使用多个package的情况下极易出错
@@ -91,16 +91,16 @@ class QuickStartPackage extends IGetArchPackage {
       final strBox = await Hive.openBox<String>(s_box_name);
       final u8Box = await Hive.openBox<Uint8List>(u_box_name);
       final intBox = await Hive.openBox<int>(i_box_name);
-      _gh.lazySingleton<Box<String>>(() => strBox);
-      _gh.lazySingleton<Box<Uint8List>>(() => u8Box);
-      _gh.lazySingleton<Box<int>>(() => intBox);
-      _gh.lazySingleton<IStorage>(() => StorageImpl(
+      gh.lazySingleton<Box<String>>(() => strBox);
+      gh.lazySingleton<Box<Uint8List>>(() => u8Box);
+      gh.lazySingleton<Box<int>>(() => intBox);
+      gh.lazySingleton<IStorage>(() => StorageImpl(
             _g<Box<String>>(),
             _g<Box<Uint8List>>(),
             _g<Box<int>>(),
           ));
     }
-    if (openDialogImpl) await initDialog(_gh);
+    if (openDialogImpl) await initDialog(gh);
   }
 }
 

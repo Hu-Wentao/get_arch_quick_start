@@ -225,11 +225,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v2.2"
-      resolved-ref: "6ad630b818f13127a687f81abf79db31c2174c06"
+      ref: "v2.3"
+      resolved-ref: "94dcf8f0ecb1b56172dba6539676975dba9b8266"
       url: "https://e.coding.net/donove/flutter/get_arch_core"
     source: git
-    version: "2.1.0-nullsafety"
+    version: "2.2.0"
   get_it:
     dependency: transitive
     description:

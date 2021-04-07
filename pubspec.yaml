@@ -1,6 +1,6 @@
 name: get_arch_quick_start
 description: GetArch quick start support
-version: 2.1.0-nullsafety.5
+version: 2.2.0
 repository: https://github.com/Hu-Wentao/get_arch_quick_start
 
 environment:
@@ -13,7 +13,7 @@ dependencies:
   get_arch_core:
     git:
       url: https://e.coding.net/donove/flutter/get_arch_core
-      ref: v2.2
+      ref: v2.3
   injectable: 
   yaml: ^3.1.0
   dio: ^4.0.0
