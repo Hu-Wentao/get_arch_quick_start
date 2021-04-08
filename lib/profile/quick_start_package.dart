@@ -5,19 +5,21 @@
 
 import 'dart:typed_data';
 
-import 'package:get_arch_core/domain/env_config.dart';
 import 'package:get_arch_core/get_arch_core.dart';
-import 'package:get_arch_core/profile/i_get_arch_package.dart';
 import 'package:get_arch_quick_start/infrastructure/network_impl.dart';
 import 'package:get_arch_quick_start/infrastructure/storage_impl.dart';
 import 'package:get_arch_quick_start/infrastructure/ui/dialog_impl.dart';
 import 'package:get_arch_quick_start/interface/i_dialog.dart';
 import 'package:get_arch_quick_start/interface/i_network.dart';
 import 'package:get_arch_quick_start/interface/i_storage.dart';
+import 'package:get_arch_quick_start/quick_start_part.dart';
 import 'package:hive/hive.dart';
 
 final _g = GetIt.instance;
 
+final _prod = EnvSign.prod.inString;
+final _test = EnvSign.test.inString;
+final _dev = EnvSign.dev.inString;
 const s_box_name = 'get_arch_quick_start_default_str_box';
 const u_box_name = 'get_arch_quick_start_default_uint8_box';
 const i_box_name = 'get_arch_quick_start_default_int_box';
@@ -31,40 +33,37 @@ const i_box_name = 'get_arch_quick_start_default_int_box';
 /// [onLocalTestStoragePath] Hive本地测试时使用的路径,不建议手动配置
 /// [openDialogImpl] Dialog实现, 默认关闭
 class QuickStartPackage extends IGetArchPackage {
-  final HttpConfig httpConfig;
-  final SocketConfig socketConfig;
+  final HttpConfig? httpConfig;
+  final SocketConfig? socketConfig;
   final bool openStorageImpl;
-  final String assignStoragePath;
+  final String? assignStoragePath;
   final String onLocalTestStoragePath;
   final bool openDialogImpl;
 
   QuickStartPackage({
-    EnvConfig pkgEnvConfig,
+    EnvConfig? pkgEnvConfig,
     this.httpConfig,
     this.socketConfig,
-    this.openStorageImpl: false,
+    this.openStorageImpl: true,
     this.assignStoragePath,
     this.onLocalTestStoragePath: './_hive_test_cache',
-    this.openDialogImpl: false,
-  })  : assert(openStorageImpl != null),
-        super(pkgEnvConfig);
+    this.openDialogImpl: true,
+  }) : super(pkgEnvConfig);
 
   @override
-  Map<String, bool> get printBoolStateWithRegTypeName => {
-        'IHttp': httpConfig != null,
-        'ISocket': socketConfig != null,
-        'IStorage': openStorageImpl != null,
-        'IDialog': openDialogImpl,
+  Map<Type, bool> get interfaceImplRegisterStatus => {
+        IHttp: httpConfig != null,
+        ISocket: socketConfig != null,
+        IStorage: openStorageImpl,
+        IDialog: openDialogImpl,
       };
-
   @override
-  Map<String, String> printOtherStateWithEnvConfig(EnvConfig config) => {
-        if (httpConfig != null) 'IHttp': '配置为: $httpConfig',
-        if (socketConfig != null) 'ISocket': '配置为: $socketConfig',
-        if (openStorageImpl != null)
-          'IStorage':
-              '配置路径: ${assignStoragePath ?? '默认[getApplicationDocumentsDirectory()]'}'
-                  '\n  本地测试时使用的路径: $onLocalTestStoragePath',
+  Map<String, String>? printOtherStateWithEnvConfig(EnvConfig? config) => {
+        'IHttp': '配置为: ${httpConfig ?? '当前未开启IHttp!'}',
+        'ISocket': '配置为: ${socketConfig ?? '当前未开启ISocket!'}',
+        'IStorage':
+            '配置路径: ${assignStoragePath ?? '默认[getApplicationDocumentsDirectory()]'}'
+                '\n  本地测试时使用的路径: $onLocalTestStoragePath',
       };
 
   Future<void> initPackage(EnvConfig config) async {
@@ -74,15 +73,19 @@ class QuickStartPackage extends IGetArchPackage {
           onLocalTestStoragePath: onLocalTestStoragePath);
   }
 
-  Future<void> initPackageDI(EnvConfig config) async {
+  Future<void>? initPackageDI(EnvConfig config,
+      {EnvironmentFilter? filter}) async {
+    final gh = GetItHelper(
+        _g, filter != null ? null : config.envSign.inString, filter);
+
     if (httpConfig != null) {
-      _g.registerFactory<HttpConfig>(() => httpConfig);
-      _g.registerLazySingleton<IHttp>(() => HttpImpl(_g<HttpConfig>()));
+      gh.lazySingleton<HttpConfig>(() => httpConfig!);
+      gh.lazySingleton<IHttp>(() => HttpImpl(_g<HttpConfig>()));
     }
 
     if (socketConfig != null) {
-      _g.registerFactory<SocketConfig>(() => socketConfig);
-      _g.registerLazySingleton<ISocket>(() => SocketImpl(_g<SocketConfig>()));
+      gh.lazySingleton<SocketConfig>(() => socketConfig!);
+      gh.lazySingleton<ISocket>(() => SocketImpl(_g<SocketConfig>()));
     }
     // 这里将Box注册为<String>, 存储对象的json字符串, 一般情况下性能与TypeAdapter区别不大
     // 使用TypeAdapter,每个类型都需要不同的id, 在使用多个package的情况下极易出错
@@ -90,31 +93,28 @@ class QuickStartPackage extends IGetArchPackage {
       final strBox = await Hive.openBox<String>(s_box_name);
       final u8Box = await Hive.openBox<Uint8List>(u_box_name);
       final intBox = await Hive.openBox<int>(i_box_name);
-      _g.registerFactory<Box<String>>(() => strBox);
-      _g.registerFactory<Box<Uint8List>>(() => u8Box);
-      _g.registerFactory<Box<int>>(() => intBox);
-      _g.registerLazySingleton<IStorage>(() => StorageImpl(
+      gh.lazySingleton<Box<String>>(() => strBox);
+      gh.lazySingleton<Box<Uint8List>>(() => u8Box);
+      gh.lazySingleton<Box<int>>(() => intBox);
+      gh.lazySingleton<IStorage>(() => StorageImpl(
             _g<Box<String>>(),
             _g<Box<Uint8List>>(),
             _g<Box<int>>(),
           ));
     }
-    if (openDialogImpl) await initDialog(_g, config.envSign.toString());
+    if (openDialogImpl) await initDialog(gh);
   }
 }
 
-initDialog(GetIt g, String environment) {
-  if (environment == 'prod') {
-    g.registerLazySingleton<IDialog>(() => QuickDialog());
-  }
-
-//Register test Dependencies --------
-  if (environment == 'test') {
-    g.registerLazySingleton<IDialog>(() => TestDialog());
-  }
-
-//Register dev Dependencies --------
-  if (environment == 'dev') {
-    g.registerLazySingleton<IDialog>(() => DevDialog());
-  }
+// 由于当前只有Dialog被自动注册, 因此这里直接调用 initDI
+initDialog(GetItHelper g) {
+  g.lazySingleton<IDialog>(() => QuickDialog(), registerFor: {_test, _prod});
+  g.lazySingleton<IDialog>(() => DevQuickDialog(), registerFor: {_dev});
 }
+
+// 通过以下代码借助build_runner生成DI代码, 生成完毕后将需要的代码复制到quick_start_package.dart
+// 以便通过参数控制依赖的注册
+//@injectableInit
+//Future<void> initDI({required String env}) async {
+//  $initGetIt(GetIt.I, environment: env);
+//}

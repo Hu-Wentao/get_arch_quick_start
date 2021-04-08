@@ -8,21 +8,22 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get_arch_core/interface/i_dto.dart';
+import 'package:get_arch_core/get_arch_core.dart';
 import 'package:get_arch_quick_start/interface/i_network.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 /// HttpImpl 使用的INetConfig类型
 class HttpConfig extends INetConfig {
-  HttpConfig(String scheme, String authority, Map<String, String> staticHeaders)
+  HttpConfig(
+      String scheme, String authority, Map<String, String>? staticHeaders)
       : super(scheme, authority, staticHeaders);
 }
 
 /// SocketImpl 使用的INetConfig类型
 class SocketConfig extends INetConfig {
   SocketConfig(
-      String scheme, String authority, Map<String, String> staticHeaders)
+      String scheme, String authority, Map<String, String>? staticHeaders)
       : super(scheme, authority, staticHeaders);
 }
 
@@ -46,33 +47,39 @@ class HttpImpl extends IHttp {
               // 这里的[staticHeaders]可能为immutable,因此需要 Map.from()
               headers: config.staticHeaders == null
                   ? {}
-                  : Map.from(config.staticHeaders)),
+                  : Map.from(config.staticHeaders!)),
         )..interceptors.addAll([
             if (!kReleaseMode)
-              PrettyDioLogger(request: false,  requestHeader: true,requestBody: true,),
+              PrettyDioLogger(
+                request: false,
+                requestHeader: true,
+                requestBody: true,
+              ),
           ]);
 
   @override
   Future handleRequest(
     String type,
     String tailUrl, {
-    IDto dataDto,
-    Map<String, dynamic> queryParameters,
+    IDto? dataDto,
+    Map<String, dynamic>? queryParameters,
     dynamic data,
   }) async =>
       _dioReqAdapter(type, tailUrl,
           dataDto: dataDto,
-          data: dataDto,
+          data: data,
+          queryParameters: queryParameters,
           options: Options(
             method: type,
           ));
 
   @override
   Future<Uint8List> handleBytesRequest(String type, String tailUrl,
-          {IDto dataDto, Map<String, dynamic> queryParameters, data}) async =>
+          {IDto? dataDto, Map<String, dynamic>? queryParameters, data}) async =>
       await _dioReqAdapter(type, tailUrl,
           dataDto: dataDto,
-          data: dataDto,
+          data: data,
+          queryParameters: queryParameters,
           options: Options(
             method: type,
             responseType: ResponseType.bytes,
@@ -81,10 +88,10 @@ class HttpImpl extends IHttp {
   _dioReqAdapter(
     String type,
     String tailUrl, {
-    IDto dataDto,
-    Map<String, dynamic> queryParameters,
-    dynamic data,
-    Options options,
+    IDto? dataDto,
+    Map<String, dynamic>? queryParameters,
+    required dynamic data,
+    required Options options,
   }) async =>
       (await dio.request(
         tailUrl,
@@ -117,7 +124,7 @@ class SocketImpl extends ISocket {
         tailUrl,
         () => socketMap.remove(tailUrl),
       );
-    return socketMap[tailUrl];
+    return socketMap[tailUrl]!;
   }
 }
 
@@ -140,7 +147,7 @@ class SocketCtrlImpl extends ISocketController {
 
   @override
   Future<void> close(
-      {int closeCode: WsCloseCode.normalClosure, String closeReason}) {
+      {int closeCode: WsCloseCode.normalClosure, String? closeReason}) async {
     if (!kReleaseMode) print('WsCtrlImpl.close # ws断开连接');
     _channel.sink.close(closeCode, closeReason);
     _onClose();

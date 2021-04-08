@@ -6,7 +6,10 @@
 import 'package:get_arch_core/get_arch_core.dart';
 
 ///
-/// 需要向后台报告的问题 -说明代码逻辑出错\表示层不合理\用户作弊
+/// 这里是一些常用的Failure
+
+///
+/// 需要向后台报告的问题 -说明代码逻辑出错\表示层不合理\非法操作
 mixin NeedFeedbackMx on Failure {
   @override
   void onCreate() {
@@ -23,7 +26,7 @@ mixin NeedFeedbackMx on Failure {
 /// 服务端出错异常(服务端程序导致的异常)
 class ServerFailure extends Failure with NeedFeedbackMx {
   /// 网络请求出错
-  ServerFailure.http(String msg, dynamic rsp)
+  ServerFailure.http(String? msg, dynamic rsp)
       : super('ServerFailure.http', '$msg\n$rsp');
 
   ServerFailure.socket(String describe, String code)
@@ -43,15 +46,15 @@ class ServerFailure extends Failure with NeedFeedbackMx {
 /// 客户端 逻辑代码出错,需要通过更新app版本解决
 /// (例如向服务器发送了错误格式的参数)
 class ClientFailure extends Failure with NeedFeedbackMx {
-  ClientFailure._(String msg) : super('ClientFailure', '$msg') {
+  ClientFailure._(String? msg) : super('ClientFailure', '$msg') {
     print(this);
   }
 
-  ClientFailure._bySubType(String subType, String msg)
+  ClientFailure._bySubType(String subType, String? msg)
       : super('ClientFailure/[$subType]', '$msg');
 
   // 要访问的远程资源出错, 可能是使用了过时的api,等等
-  factory ClientFailure.badReq(int httpCode, String msg, dynamic rsp) {
+  factory ClientFailure.badReq(int httpCode, String? msg, dynamic rsp) {
     if (httpCode == 401) {
       return NotLoginFailure();
     }
@@ -59,17 +62,17 @@ class ClientFailure extends Failure with NeedFeedbackMx {
   }
 
   // 从服务器校验出客户端发出的参数有误
-  factory ClientFailure.badParam(String head, String code, String msg) {
+  factory ClientFailure.badParam(String? head, String? code, String msg) {
     // note-m: 各个feat中都需要继承自 ClientFailure的 BadParamFailure类,方便进行异常处理
-    return BadParamFailure(head, code, msg);
+    return BadParamFailure('$head', '$code', msg);
   }
 
   // 从本地校验出输入值出错
   // 可能是非法输入\逻辑层出错\表示层出错(如,表示层没有做出输入值的范围限制,导致程序出错)
-  ClientFailure.badInput(String msg) : super('.badInput', '$msg');
+  ClientFailure.badInput(String? msg) : super('.badInput', '$msg');
 
   // 程序代码有误, 或者代码不完善导致出错
-  ClientFailure.badLogic(String msg) : super('.badLogic', '$msg');
+  ClientFailure.badLogic(String? msg) : super('.badLogic', '$msg');
 
   // 功能正在开发中
   ClientFailure.featDeveloping(String className)
@@ -77,7 +80,8 @@ class ClientFailure extends Failure with NeedFeedbackMx {
 }
 
 class NotLoginFailure extends Failure implements ClientFailure {
-  NotLoginFailure({String msg: '您尚未登陆'}) : super('ClientFailure/NotLogin', msg);
+  NotLoginFailure({String? msg: '您尚未登陆'})
+      : super('ClientFailure/NotLogin', '$msg');
 }
 
 /// note-m: 考虑通过[cateCode]和[errCode], 映射到具体的module错误类型
@@ -99,16 +103,16 @@ class BadParamFailure extends ClientFailure {
 ///
 /// 网络错误,连不上服务器(可能是用户没联网)
 class NetworkFailure extends Failure {
-  NetworkFailure(String msg) : super('NetworkFailure', '$msg');
+  NetworkFailure(String? msg) : super('NetworkFailure', '$msg');
 }
 
 /// 用户输入的格式没有问题, 只是参数值无效, 例如密码错误
 class InvalidInputWithoutFeedbackFailure extends Failure {
-  InvalidInputWithoutFeedbackFailure(String msg) : super('[请重输参数]', '$msg');
+  InvalidInputWithoutFeedbackFailure(String? msg) : super('[请检查后重试]', '$msg');
 }
 
 /// 未知错误,需要反馈
-class UnknownFailure extends Failure with NeedFeedbackMx {
-  UnknownFailure(String msg, [dynamic trace])
-      : super('UnknownFailure', '\n[$msg]\ntrace:\n[$trace]');
+class FeedBackUnknownFailure extends UnknownFailure with NeedFeedbackMx {
+  FeedBackUnknownFailure(String? msg, [dynamic trace])
+      : super('FeedBackUnknownFailure', '\n[$msg]\ntrace:\n[$trace]');
 }

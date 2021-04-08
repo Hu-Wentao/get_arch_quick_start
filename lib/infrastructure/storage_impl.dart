@@ -12,8 +12,8 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<void> initHive({
-  String assignStoragePath,
-  String onLocalTestStoragePath,
+  String? assignStoragePath,
+  String? onLocalTestStoragePath,
 }) async {
   var path;
 
@@ -38,19 +38,19 @@ class StorageImpl extends IStorage {
   StorageImpl(this.strBox, this.u8Box, this.intBox);
 
   @override
-  int getInt(String key) => intBox.get(key);
+  int? getInt(String key) => intBox.get(key);
 
   @override
   void setInt(String key, int value) async => await intBox.put(key, value);
 
   @override
-  Uint8List getUint8List(String key) => u8Box.get(key);
+  Uint8List? getUint8List(String key) => u8Box.get(key);
 
   @override
   void setUint8List(String key, Uint8List value) async =>
       await u8Box.put(key, value);
   @override
-  String getData(String key) => strBox.get(key);
+  String? getData(String key) => strBox.get(key);
 
   @override
   Future<void> setData(String key, String value) async =>
@@ -61,7 +61,7 @@ class StorageImpl extends IStorage {
       setData(key, json.encode(js));
 
   @override
-  Map<String, dynamic> getJson(String key) {
+  Map<String, dynamic>? getJson(String key) {
     final r = getData(key);
     if (r == null) return null;
     return json.decode(r);
