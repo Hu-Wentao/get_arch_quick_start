@@ -21,8 +21,7 @@ class INetConfig extends Equatable {
     this.scheme,
     this.authority,
     this.staticHeaders,
-  )   : assert(scheme != null),
-        assert(authority != null);
+  );
 
   INetConfig.named({
     required String scheme,

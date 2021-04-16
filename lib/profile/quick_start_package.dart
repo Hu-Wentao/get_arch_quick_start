@@ -6,14 +6,11 @@
 import 'dart:typed_data';
 
 import 'package:get_arch_core/get_arch_core.dart';
-import 'package:get_arch_quick_start/infrastructure/network_impl.dart';
-import 'package:get_arch_quick_start/infrastructure/storage_impl.dart';
 import 'package:get_arch_quick_start/infrastructure/ui/dialog_impl.dart';
 import 'package:get_arch_quick_start/interface/i_dialog.dart';
 import 'package:get_arch_quick_start/interface/i_network.dart';
 import 'package:get_arch_quick_start/interface/i_storage.dart';
 import 'package:get_arch_quick_start/quick_start_part.dart';
-import 'package:hive/hive.dart';
 
 final _g = GetIt.instance;
 
@@ -33,8 +30,11 @@ const i_box_name = 'get_arch_quick_start_default_int_box';
 /// [onLocalTestStoragePath] Hive本地测试时使用的路径,不建议手动配置
 /// [openDialogImpl] Dialog实现, 默认关闭
 class QuickStartPackage extends IGetArchPackage {
-  final HttpConfig? httpConfig;
-  final SocketConfig? socketConfig;
+  @Deprecated('实现已移除')
+  final INetConfig? httpConfig;
+  @Deprecated('实现已移除')
+  final INetConfig? socketConfig;
+  @Deprecated('实现已移除')
   final bool openStorageImpl;
   final String? assignStoragePath;
   final String onLocalTestStoragePath;
@@ -66,42 +66,13 @@ class QuickStartPackage extends IGetArchPackage {
                 '\n  本地测试时使用的路径: $onLocalTestStoragePath',
       };
 
-  Future<void> initPackage(EnvConfig config) async {
-    if (openStorageImpl)
-      await initHive(
-          assignStoragePath: assignStoragePath,
-          onLocalTestStoragePath: onLocalTestStoragePath);
-  }
+  Future<void> initPackage(EnvConfig config) async {}
 
   Future<void>? initPackageDI(EnvConfig config,
       {EnvironmentFilter? filter}) async {
     final gh = GetItHelper(
         _g, filter != null ? null : config.envSign.inString, filter);
 
-    if (httpConfig != null) {
-      gh.lazySingleton<HttpConfig>(() => httpConfig!);
-      gh.lazySingleton<IHttp>(() => HttpImpl(_g<HttpConfig>()));
-    }
-
-    if (socketConfig != null) {
-      gh.lazySingleton<SocketConfig>(() => socketConfig!);
-      gh.lazySingleton<ISocket>(() => SocketImpl(_g<SocketConfig>()));
-    }
-    // 这里将Box注册为<String>, 存储对象的json字符串, 一般情况下性能与TypeAdapter区别不大
-    // 使用TypeAdapter,每个类型都需要不同的id, 在使用多个package的情况下极易出错
-    if (openStorageImpl) {
-      final strBox = await Hive.openBox<String>(s_box_name);
-      final u8Box = await Hive.openBox<Uint8List>(u_box_name);
-      final intBox = await Hive.openBox<int>(i_box_name);
-      gh.lazySingleton<Box<String>>(() => strBox);
-      gh.lazySingleton<Box<Uint8List>>(() => u8Box);
-      gh.lazySingleton<Box<int>>(() => intBox);
-      gh.lazySingleton<IStorage>(() => StorageImpl(
-            _g<Box<String>>(),
-            _g<Box<Uint8List>>(),
-            _g<Box<int>>(),
-          ));
-    }
     if (openDialogImpl) await initDialog(gh);
   }
 }

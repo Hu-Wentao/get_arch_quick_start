@@ -14,8 +14,6 @@ export 'interface/i_storage.dart';
 export 'infrastructure/ui/dialog_impl.dart';
 export 'infrastructure/ui/views.dart';
 export 'infrastructure/ui/extension.dart';
-export 'infrastructure/network_impl.dart';
-export 'infrastructure/storage_impl.dart';
 export 'package:nil/nil.dart';
 
 export 'profile/get_arch_application_x.dart';

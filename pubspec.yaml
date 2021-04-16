@@ -16,11 +16,11 @@ dependencies:
       ref: v2.3
   injectable: 
   yaml: ^3.1.0
-  dio: ^4.0.0
-  pretty_dio_logger: null
-  web_socket_channel: ^2.0.0
-  hive: ^2.0.2
-  path_provider: ^2.0.0
+  # dio: ^4.0.0
+  # pretty_dio_logger: null
+  # web_socket_channel: ^2.0.0
+  # hive: ^2.0.2
+  # path_provider: ^2.0.0
   nil: null
 dev_dependencies:
   flutter_test:

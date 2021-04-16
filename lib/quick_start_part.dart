@@ -5,11 +5,6 @@
 
 library quick_start_part;
 
-export 'package:hive/hive.dart';
-export 'package:path_provider/path_provider.dart';
-
-export 'package:dio/dio.dart';
-export 'package:pretty_dio_logger/pretty_dio_logger.dart';
 export 'package:web_socket_channel/web_socket_channel.dart';
 
 export 'package:get_arch_core/get_arch_other.dart';
