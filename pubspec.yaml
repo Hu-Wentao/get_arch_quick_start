@@ -15,7 +15,7 @@ dependencies:
       url: https://e.coding.net/donove/flutter/get_arch_core
       ref: v2.3
   injectable: 
-  yaml: ^3.1.0
+#  yaml: ^3.1.0
   # dio: ^4.0.0
   # pretty_dio_logger: null
   # web_socket_channel: ^2.0.0
